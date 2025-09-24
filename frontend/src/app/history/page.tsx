@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import ProtectedRoute from '@/components/ProtectedRoute';
 import { useQueryHistory, useRiskAnalysis } from '@/hooks/useQueries';
+import type { Query } from '@/types/api';
 import { 
   FileText, 
   Clock, 
@@ -234,7 +235,7 @@ function HistoryContent() {
             {queryHistory?.queries.length ? (
               <>
                 <div className="divide-y divide-gray-200">
-                  {queryHistory.queries.map((query) => (
+                  {queryHistory.queries.map((query: Query) => (
                     <div
                       key={query.id}
                       className="px-6 py-4 hover:bg-gray-50 transition-colors"
