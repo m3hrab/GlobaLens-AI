@@ -5,8 +5,31 @@ export default function HomePage() {
   return (
     <div className="min-h-screen">
       {/* Hero Section */}
-      <section className="bg-gradient-to-br from-blue-600 via-blue-700 to-indigo-800 text-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 lg:py-32">
+      <section className="relative bg-gradient-to-br from-blue-600 via-blue-700 to-indigo-800 text-white overflow-hidden w-full">
+        {/* Background Video */}
+        <div className="absolute inset-0 z-0 w-full h-full">
+          <iframe
+            src="https://player.vimeo.com/video/1121692387?background=1&autoplay=1&loop=1&muted=1&controls=0&title=0&byline=0&portrait=0"
+            className="absolute inset-0 w-full h-full"
+            style={{ 
+              position: 'absolute',
+              top: '-15em',
+              left: 0,
+              width: '100vw',
+              height: '150%',
+              minWidth: '100vw',
+              objectFit: 'cover',
+              zIndex: -1
+            }}
+            frameBorder="0"
+            allow="autoplay; fullscreen; picture-in-picture"
+            allowFullScreen
+          />
+          {/* Dark overlay for better text readability */}
+          <div className="absolute inset-0 bg-black/40"></div>
+        </div>
+        
+        <div className="relative z-10 w-full px-4 sm:px-6 lg:px-8 py-24 lg:py-32">
           <div className="text-center">
             <h1 className="text-4xl md:text-6xl font-bold mb-6">
               <span className="block">GlobaLens AI</span>

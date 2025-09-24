@@ -14,7 +14,7 @@ const LayoutWrapper = ({ children }: LayoutWrapperProps) => {
   const pathname = usePathname();
 
   // Pages that should use the dashboard layout
-  const dashboardPages = ['/dashboard', '/history', '/settings'];
+  const dashboardPages = ['/dashboard', '/history', '/analytics', '/settings'];
   const shouldUseDashboardLayout = isAuthenticated && dashboardPages.some(page => pathname.startsWith(page));
 
   if (shouldUseDashboardLayout) {

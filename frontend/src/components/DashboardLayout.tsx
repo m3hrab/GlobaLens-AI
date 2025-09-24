@@ -14,9 +14,11 @@ import {
   User,
   Settings,
   Bell,
-  Search
+  Search,
+  TrendingUp
 } from 'lucide-react';
 import { ThemeToggle } from './theme-toggle';
+import { NotificationPanel } from '@/contexts/NotificationContext';
 
 interface DashboardLayoutProps {
   children: React.ReactNode;
@@ -31,6 +33,7 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
     { name: 'Dashboard', href: '/dashboard', icon: BarChart3 },
     { name: 'Home', href: '/', icon: Home },
     { name: 'History', href: '/history', icon: History },
+    { name: 'View Analysis on Graph', href: '/analytics', icon: TrendingUp },
     { name: 'Settings', href: '/settings', icon: Settings },
   ];
 
@@ -152,14 +155,11 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
                 </div>
               </div>
 
-              {/* Theme Toggle */}
-              <ThemeToggle />
+                  {/* Theme Toggle */}
+                  <ThemeToggle />
 
-              {/* Notifications */}
-              <button className="p-2 text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300 relative transition-colors">
-                <Bell className="h-5 w-5" />
-                <span className="absolute top-1 right-1 h-2 w-2 bg-red-500 rounded-full"></span>
-              </button>
+                  {/* Notifications */}
+                  <NotificationPanel />
 
               {/* User avatar */}
               <div className="flex items-center space-x-3">

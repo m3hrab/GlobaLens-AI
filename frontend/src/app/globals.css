@@ -226,3 +226,109 @@ html.dark a[href*="/settings"].bg-gradient-to-r {
   0%, 100% { opacity: 1; }
   50% { opacity: 0.5; }
 }
+
+/* Force notification panel visibility in dark mode */
+html.dark .notification-panel {
+  background: #1e293b !important;
+  border-color: #475569 !important;
+  color: #f8fafc !important;
+  z-index: 9999 !important;
+}
+
+html.dark .notification-panel * {
+  color: inherit !important;
+}
+
+html.dark .notification-panel .notification-item {
+  background: rgba(30, 41, 59, 0.8) !important;
+  border-color: #475569 !important;
+}
+
+html.dark .notification-panel .notification-item:hover {
+  background: rgba(51, 65, 85, 0.8) !important;
+}
+
+/* Force light mode dashboard styling */
+html:not(.dark) .dashboard-page {
+  background: #f1f5f9 !important;
+  color: #0f172a !important;
+}
+
+html:not(.dark) .dashboard-page * {
+  color: inherit !important;
+}
+
+html:not(.dark) .dashboard-page .ai-analyzer-section {
+  background: linear-gradient(145deg, #ffffff 0%, #f8fafc 50%, #f1f5f9 100%) !important;
+  border-color: #cbd5e1 !important;
+  color: #0f172a !important;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1) !important;
+}
+
+html:not(.dark) .dashboard-page .stats-card {
+  background: #ffffff !important;
+  border-color: #cbd5e1 !important;
+  color: #0f172a !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08) !important;
+}
+
+html:not(.dark) .dashboard-page .stats-card:hover {
+  background: #f8fafc !important;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12) !important;
+}
+
+html:not(.dark) .dashboard-page .recent-analysis-section {
+  background: #ffffff !important;
+  border-color: #cbd5e1 !important;
+  color: #0f172a !important;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1) !important;
+}
+
+html:not(.dark) .dashboard-page .recent-analysis-section:hover {
+  background: #f8fafc !important;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15) !important;
+}
+
+html:not(.dark) .dashboard-page .gradient-text {
+  background: linear-gradient(135deg, #2563eb 0%, #7c3aed 50%, #db2777 100%) !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  color: transparent !important;
+}
+
+html:not(.dark) .dashboard-page .glass-effect {
+  background: #ffffff !important;
+  backdrop-filter: blur(20px) !important;
+  border: 1px solid #cbd5e1 !important;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1) !important;
+}
+
+/* Enhanced text colors for light mode */
+html:not(.dark) .dashboard-page h1,
+html:not(.dark) .dashboard-page h2,
+html:not(.dark) .dashboard-page h3 {
+  color: #0f172a !important;
+}
+
+html:not(.dark) .dashboard-page p,
+html:not(.dark) .dashboard-page span {
+  color: #334155 !important;
+}
+
+html:not(.dark) .dashboard-page .text-slate-300 {
+  color: #64748b !important;
+}
+
+html:not(.dark) .dashboard-page .text-white {
+  color: #0f172a !important;
+}
+
+/* Custom class for black background in dark mode */
+.dashboard-main-content {
+  background: transparent;
+}
+
+html.dark .dashboard-main-content {
+  background: #000000 !important;
+}
