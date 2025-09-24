@@ -23,9 +23,9 @@ const LayoutWrapper = ({ children }: LayoutWrapperProps) => {
 
   // Default layout with navbar for public pages
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors">
       <Navbar />
-      <main>{children}</main>
+      <main className="min-h-[calc(100vh-4rem)]">{children}</main>
     </div>
   );
 };

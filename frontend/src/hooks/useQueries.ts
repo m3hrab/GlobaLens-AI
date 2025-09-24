@@ -8,7 +8,7 @@ export const useCreateQuery = () => {
   const queryClient = useQueryClient();
   
   return useMutation({
-    mutationFn: (data: CreateQueryRequest) => queryApi.createQuery(data),
+    mutationFn: (data: CreateQueryRequest) => queryApi.create(data),
     onSuccess: () => {
       // Invalidate query history to refresh the list
       queryClient.invalidateQueries({ queryKey: ['queryHistory'] });
@@ -19,7 +19,7 @@ export const useCreateQuery = () => {
 export const useQueryById = (queryId: number, enabled: boolean = true) => {
   return useQuery({
     queryKey: ['query', queryId],
-    queryFn: () => queryApi.getQuery(queryId),
+    queryFn: () => queryApi.get(queryId),
     enabled,
   });
 };
@@ -27,7 +27,7 @@ export const useQueryById = (queryId: number, enabled: boolean = true) => {
 export const useQueryHistory = (page: number = 1, pageSize: number = 10) => {
   return useQuery({
     queryKey: ['queryHistory', page, pageSize],
-    queryFn: () => queryApi.getQueryHistory(page, pageSize),
+    queryFn: () => queryApi.getHistory(page, pageSize),
   });
 };
 
