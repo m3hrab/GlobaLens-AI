@@ -67,7 +67,7 @@ async def signup(user_data: UserCreate, db: Session = Depends(get_db)):
     # Create access token
     access_token_expires = timedelta(minutes=settings.access_token_expire_minutes)
     access_token = create_access_token(
-        data={"sub": db_user.id, "email": db_user.email},
+        data={"sub": str(db_user.id), "email": db_user.email},
         expires_delta=access_token_expires
     )
     
@@ -113,7 +113,7 @@ async def login(user_credentials: UserLogin, db: Session = Depends(get_db)):
     # Create access token
     access_token_expires = timedelta(minutes=settings.access_token_expire_minutes)
     access_token = create_access_token(
-        data={"sub": user.id, "email": user.email},
+        data={"sub": str(user.id), "email": user.email},
         expires_delta=access_token_expires
     )
     
@@ -152,7 +152,7 @@ async def refresh_token(current_user: User = Depends(get_current_user)):
     """
     access_token_expires = timedelta(minutes=settings.access_token_expire_minutes)
     access_token = create_access_token(
-        data={"sub": current_user.id, "email": current_user.email},
+        data={"sub": str(current_user.id), "email": current_user.email},
         expires_delta=access_token_expires
     )
     

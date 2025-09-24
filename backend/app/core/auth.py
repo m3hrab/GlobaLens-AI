@@ -77,10 +77,16 @@ def verify_token(token: str) -> TokenData:
     
     try:
         payload = jwt.decode(token, settings.secret_key, algorithms=[settings.algorithm])
-        user_id: int = payload.get("sub")
-        email: str = payload.get("email")
+        user_id_str = payload.get("sub")
+        email = payload.get("email")
         
-        if user_id is None or email is None:
+        if user_id_str is None or email is None:
+            raise credentials_exception
+        
+        # Convert user_id string to int
+        try:
+            user_id = int(user_id_str)
+        except (ValueError, TypeError):
             raise credentials_exception
             
         token_data = TokenData(user_id=user_id, email=email)
