@@ -119,7 +119,7 @@ function DashboardContent() {
                   <h2 className="gradient-text text-4xl font-bold bg-gradient-to-r from-blue-300 via-indigo-300 to-purple-300 bg-clip-text text-transparent mb-2">
                     AI Risk Analyzer
                   </h2>
-              <p className="text-slate-600 dark:text-slate-300 text-lg font-medium">Powered by Advanced Machine Learning</p>
+              <p className="text-slate-600 dark:text-slate-300 text-lg font-medium">Intelligent Risk Assessment & Predictive Analytics</p>
               <div className="flex items-center justify-center mt-3 space-x-2">
                 <div className="h-1 w-8 bg-blue-500 dark:bg-gradient-to-r dark:from-blue-500 dark:to-transparent rounded-full"></div>
                 <div className="h-1 w-12 bg-indigo-500 dark:bg-gradient-to-r dark:from-indigo-500 dark:to-purple-500 rounded-full"></div>
