@@ -22,9 +22,9 @@ class Settings(BaseSettings):
     # Database
     database_url: str = "sqlite:///./globallens.db"
     
-    # SmythOS Agent URLs
-    web_risk_monitor_url: str = "https://cmfwyngz91sn8o3wt46vmu9sp.agent.a.smyth.ai/api/analyze_route_risks"
-    action_plan_agent_url: str = "https://cmfxk1sby3663o3wtnuunk659.agent.a.smyth.ai/api/generate_action_plan"
+    # SmythOS Agent URLs - Updated with deployed agents and correct endpoints
+    web_risk_monitor_url: str = "https://cmfx0m6pd1z1o23quzznwufz2.agent.pa.smyth.ai/api/analyze_route_risks"
+    action_plan_agent_url: str = "https://cmfxm82uq3jcb2py5aawkp62d.agent.pa.smyth.ai/api/generate_action_plan"
     
     # HTTP Client Settings
     agent_timeout: int = 60
