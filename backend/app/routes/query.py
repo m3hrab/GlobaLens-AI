@@ -18,8 +18,7 @@ router = APIRouter()
 
 async def process_risk_analysis_background(
     query_id: int, 
-    question: str, 
-    db: Session
+    question: str
 ):
     """
     Background task to process risk analysis
@@ -27,8 +26,11 @@ async def process_risk_analysis_background(
     Args:
         query_id: Query ID
         question: User question
-        db: Database session
     """
+    from app.core.database import SessionLocal
+    
+    # Create a new database session for this background task
+    db = SessionLocal()
     agent_service = AgentService()
     
     try:
@@ -36,12 +38,13 @@ async def process_risk_analysis_background(
         QueryService.update_query_status(db, query_id, "processing")
         
         # Call Web Risk Monitor Agent
+        print(f"🔍 Processing risk analysis for query {query_id}...")
         risk_analysis = await agent_service.analyze_route_risks(question)
         
         # Extract metadata
         metadata = risk_analysis.pop("_metadata", {})
         
-        # Save report
+        # Save risk analysis report
         ReportService.create_report(
             db=db,
             query_id=query_id,
@@ -51,18 +54,41 @@ async def process_risk_analysis_background(
             agent_version=metadata.get("agent_version")
         )
         
+        # Now call Action Plan Agent with the risk analysis results
+        print(f"🎯 Generating action plan for query {query_id}...")
+        action_plan = await agent_service.generate_action_plan(risk_analysis)
+        
+        # Extract action plan metadata
+        action_metadata = action_plan.pop("_metadata", {})
+        
+        # Save action plan report
+        ReportService.create_report(
+            db=db,
+            query_id=query_id,
+            report_type="action_plan",
+            json_report=action_plan,
+            processing_time=action_metadata.get("processing_time"),
+            agent_version=action_metadata.get("agent_version")
+        )
+        
         # Update query status and route data
         route_data = None
-        if "summary" in risk_analysis and "route" in risk_analysis["summary"]:
+        if "route" in risk_analysis:
+            route_data = risk_analysis["route"]
+        elif "summary" in risk_analysis and "route" in risk_analysis["summary"]:
             route_data = risk_analysis["summary"]["route"]
         
         QueryService.update_query_status(db, query_id, "completed", route_data)
+        print(f"✅ Query {query_id} processing completed successfully!")
         
     except Exception as e:
         # Update query status to failed
         QueryService.update_query_status(db, query_id, "failed")
-        # In production, you might want to log this error
-        print(f"Risk analysis failed for query {query_id}: {str(e)}")
+        print(f"❌ Risk analysis failed for query {query_id}: {str(e)}")
+        
+    finally:
+        # Always close the database session
+        db.close()
 
 
 @router.post("/", response_model=QueryResponse, status_code=status.HTTP_201_CREATED)
@@ -91,8 +117,7 @@ async def create_query(
     background_tasks.add_task(
         process_risk_analysis_background,
         db_query.id,
-        query_data.question,
-        db
+        query_data.question
     )
     
     return QueryResponse.from_orm(db_query)

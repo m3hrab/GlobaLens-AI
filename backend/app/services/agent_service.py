@@ -104,7 +104,7 @@ class AgentService:
         Returns:
             Dict[str, Any]: Risk analysis response
         """
-        request_data = WebRiskMonitorRequest(question=question).dict()
+        request_data = {"question": question}
         
         start_time = time.time()
         
@@ -117,18 +117,30 @@ class AgentService:
             
             processing_time = time.time() - start_time
             
-            # Validate response structure
-            validated_response = WebRiskMonitorResponse(**response_data)
-            
-            # Add processing metadata
-            result = validated_response.dict()
-            result["_metadata"] = {
-                "processing_time": processing_time,
-                "agent_version": "web-risk-monitor-v1",
-                "request_timestamp": start_time
-            }
-            
-            return result
+            # SmythOS returns data in a specific format: {"id": ..., "name": ..., "result": {"Output": "..."}}
+            # Extract the actual output from the nested structure
+            if "result" in response_data and "Output" in response_data["result"]:
+                import json
+                actual_output = json.loads(response_data["result"]["Output"])
+                
+                # Add processing metadata
+                actual_output["_metadata"] = {
+                    "processing_time": processing_time,
+                    "agent_version": "web-risk-monitor-v1",
+                    "request_timestamp": start_time,
+                    "smythos_id": response_data.get("id"),
+                    "smythos_name": response_data.get("name")
+                }
+                
+                return actual_output
+            else:
+                # Fallback: return raw response with metadata
+                response_data["_metadata"] = {
+                    "processing_time": processing_time,
+                    "agent_version": "web-risk-monitor-v1",
+                    "request_timestamp": start_time
+                }
+                return response_data
             
         except Exception as e:
             if isinstance(e, HTTPException):
@@ -149,7 +161,7 @@ class AgentService:
         Returns:
             Dict[str, Any]: Action plan response
         """
-        request_data = ActionPlanRequest(route_risks=route_risks).dict()
+        request_data = {"route_risks": route_risks}
         
         start_time = time.time()
         
@@ -162,18 +174,46 @@ class AgentService:
             
             processing_time = time.time() - start_time
             
-            # Validate response structure
-            validated_response = ActionPlanResponse(**response_data)
-            
-            # Add processing metadata
-            result = validated_response.dict()
-            result["_metadata"] = {
-                "processing_time": processing_time,
-                "agent_version": "action-plan-v1",
-                "request_timestamp": start_time
-            }
-            
-            return result
+            # SmythOS returns data in a specific format: {"id": ..., "name": ..., "result": {"Output": "..."}}
+            # Extract the actual output from the nested structure
+            if "result" in response_data and "Output" in response_data["result"]:
+                import json
+                try:
+                    actual_output = json.loads(response_data["result"]["Output"])
+                except (json.JSONDecodeError, TypeError):
+                    # If parsing fails, use the raw output
+                    actual_output = response_data["result"]["Output"]
+                
+                # Add processing metadata
+                if isinstance(actual_output, dict):
+                    actual_output["_metadata"] = {
+                        "processing_time": processing_time,
+                        "agent_version": "action-plan-v1",
+                        "request_timestamp": start_time,
+                        "smythos_id": response_data.get("id"),
+                        "smythos_name": response_data.get("name")
+                    }
+                    return actual_output
+                else:
+                    # If not a dict, wrap it
+                    return {
+                        "action_plan": actual_output,
+                        "_metadata": {
+                            "processing_time": processing_time,
+                            "agent_version": "action-plan-v1",
+                            "request_timestamp": start_time,
+                            "smythos_id": response_data.get("id"),
+                            "smythos_name": response_data.get("name")
+                        }
+                    }
+            else:
+                # Fallback: return raw response with metadata
+                response_data["_metadata"] = {
+                    "processing_time": processing_time,
+                    "agent_version": "action-plan-v1",
+                    "request_timestamp": start_time
+                }
+                return response_data
             
         except Exception as e:
             if isinstance(e, HTTPException):
@@ -201,17 +241,20 @@ class AgentService:
         
         try:
             async with httpx.AsyncClient(timeout=timeout) as client:
-                # Try a HEAD request or minimal GET
-                response = await client.get(self.web_risk_monitor_url.replace("/api/analyze_route_risks", ""))
-                health_status["web_risk_monitor"] = "healthy" if response.status_code < 500 else "unhealthy"
+                # Try base URL for health check
+                base_url = self.web_risk_monitor_url.replace("/api/analyze_route_risks", "")
+                response = await client.get(base_url)
+                health_status["web_risk_monitor"] = "available" if response.status_code < 500 else "unavailable"
         except:
-            health_status["web_risk_monitor"] = "unreachable"
+            health_status["web_risk_monitor"] = "unavailable"
         
         try:
             async with httpx.AsyncClient(timeout=timeout) as client:
-                response = await client.get(self.action_plan_agent_url.replace("/api/generate_action_plan", ""))
-                health_status["action_plan_agent"] = "healthy" if response.status_code < 500 else "unhealthy"
+                # Try base URL for health check
+                base_url = self.action_plan_agent_url.replace("/api/generate_action_plan", "")
+                response = await client.get(base_url)
+                health_status["action_plan_agent"] = "available" if response.status_code < 500 else "unavailable"
         except:
-            health_status["action_plan_agent"] = "unreachable"
+            health_status["action_plan_agent"] = "unavailable"
         
         return health_status
