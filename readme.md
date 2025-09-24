@@ -260,11 +260,21 @@ GlobaLens-AI/
 
 ## 👥 **Team & Contact**
 
+### **Team BUBT_Droptouts**
 **Built with ❤️ for HackTheAI 2025**
 
-- **GitHub**: [github.com/m3hrab/GlobaLens-AI](https://github.com/m3hrab/GlobaLens-AI)
-- **Demo**: [Live deployment coming soon]
-- **Documentation**: [Complete API docs included]
+#### **Team Members**
+- **Mehrab Hossain** - Lead Backend Developer & System Architect  
+  📧 GitHub: [@m3hrab](https://github.com/m3hrab)
+  
+- **Zehad Khan** - Frontend Developer & UI/UX Designer  
+  📧 GitHub: [@zehadkhan](https://github.com/zehadkhan)
+
+#### **Project Links**
+- **📂 Repository**: [github.com/m3hrab/GlobaLens-AI](https://github.com/m3hrab/GlobaLens-AI)
+- **🚀 Live Demo**: [Coming soon - Backend ready at localhost:8000]
+- **📚 Documentation**: [Complete API docs included]
+- **🏆 Team**: BUBT_Droptouts - HackTheAI 2025
 
 ---
 
