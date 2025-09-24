@@ -264,10 +264,10 @@ GlobaLens-AI/
 **Built with ❤️ for HackTheAI 2025**
 
 #### **Team Members**
-- **Mehrab Hossain** - Lead Backend Developer & System Architect  
+- **Mehrab Hossain**  
   📧 GitHub: [@m3hrab](https://github.com/m3hrab)
   
-- **Zehad Khan** - Frontend Developer & UI/UX Designer  
+- **Zehad Khan**  
   📧 GitHub: [@zehadkhan](https://github.com/zehadkhan)
 
 #### **Project Links**
