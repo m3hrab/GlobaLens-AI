@@ -42,7 +42,7 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors">
+    <div className="flex h-screen bg-gray-50 dark:gradient-purple-blue transition-colors overflow-hidden">
       {/* Mobile sidebar overlay */}
       {sidebarOpen && (
         <div 
@@ -53,13 +53,13 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
         </div>
       )}
 
-      {/* Sidebar - Completely Fixed */}
-      <div className={`fixed inset-y-0 left-0 z-50 w-64 bg-white dark:bg-gray-800 shadow-lg transform transition-transform duration-300 ease-in-out lg:translate-x-0 ${
+      {/* Sidebar - Fixed Position */}
+      <div className={`fixed inset-y-0 left-0 z-50 w-64 bg-white dark:bg-slate-800 shadow-lg transform transition-transform duration-300 ease-in-out lg:translate-x-0 ${
         sidebarOpen ? 'translate-x-0' : '-translate-x-full'
       }`}>
         <div className="flex flex-col h-full overflow-y-auto">
           {/* Logo */}
-          <div className="flex items-center justify-between h-16 px-6 border-b border-gray-200 dark:border-gray-700 flex-shrink-0">
+          <div className="flex items-center justify-between h-16 px-6 border-b border-gray-200 dark:border-slate-600 flex-shrink-0">
             <Link href="/dashboard" className="flex items-center space-x-2">
               <BarChart3 className="h-8 w-8 text-blue-600 dark:text-blue-400" />
               <span className="text-xl font-bold text-gray-900 dark:text-white">GlobaLens AI</span>
@@ -82,8 +82,8 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
                   href={item.href}
                   className={`flex items-center space-x-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
                     isActive(item.href)
-                      ? 'bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400 border-r-2 border-blue-700 dark:border-blue-400'
-                      : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-gray-900 dark:hover:text-white'
+                      ? 'bg-gradient-to-r from-blue-50 to-indigo-50 dark:bg-black text-blue-700 dark:text-white border-r-2 border-blue-600 dark:border-gray-600 shadow-sm'
+                      : 'text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-slate-700 hover:text-gray-900 dark:hover:text-white'
                   }`}
                   onClick={() => setSidebarOpen(false)}
                 >
@@ -95,23 +95,23 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
           </nav>
 
           {/* User section */}
-          <div className="border-t border-gray-200 dark:border-gray-700 p-4 flex-shrink-0">
+          <div className="border-t border-gray-200 dark:border-slate-600 p-4 flex-shrink-0">
             <div className="flex items-center space-x-3 mb-4">
-              <div className="bg-blue-100 dark:bg-blue-900/30 p-2 rounded-full">
-                <User className="h-5 w-5 text-blue-600 dark:text-blue-400" />
+              <div className="bg-blue-100 dark:bg-blue-600/20 p-2 rounded-full">
+                <User className="h-5 w-5 text-blue-600 dark:text-blue-300" />
               </div>
               <div className="flex-1 min-w-0">
                 <p className="text-sm font-medium text-gray-900 dark:text-white truncate">
                   {user?.name}
                 </p>
-                <p className="text-xs text-gray-500 dark:text-gray-400 truncate">
+                <p className="text-xs text-gray-500 dark:text-gray-300 truncate">
                   {user?.email}
                 </p>
               </div>
             </div>
             <button
               onClick={logout}
-              className="flex items-center space-x-3 w-full px-3 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-gray-900 dark:hover:text-white rounded-lg transition-colors"
+              className="flex items-center space-x-3 w-full px-3 py-2 text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-slate-700 hover:text-gray-900 dark:hover:text-white rounded-lg transition-colors"
             >
               <LogOut className="h-5 w-5" />
               <span>Sign out</span>
@@ -121,9 +121,9 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
       </div>
 
       {/* Main content - Completely Separate */}
-      <div className="lg:pl-64 min-h-screen">
+      <div className="flex-1 flex flex-col lg:ml-64 min-h-screen overflow-hidden">
         {/* Top bar */}
-        <div className="sticky top-0 z-40 bg-white dark:bg-gray-800 shadow-sm border-b border-gray-200 dark:border-gray-700">
+            <div className="bg-white dark:gradient-card shadow-sm border-b border-gray-200 dark:border-purple-500/30 flex-shrink-0">
           <div className="flex items-center justify-between h-16 px-4 sm:px-6 lg:px-8">
             <div className="flex items-center">
               <button
@@ -175,7 +175,7 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
         </div>
 
         {/* Page content */}
-        <main className="bg-gray-50 dark:bg-gray-900 transition-colors min-h-[calc(100vh-4rem)]">
+        <main className="flex-1 bg-gray-50 dark:gradient-purple-blue transition-colors overflow-y-auto">
           {children}
         </main>
       </div>

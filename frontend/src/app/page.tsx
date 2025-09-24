@@ -38,7 +38,7 @@ export default function HomePage() {
       </section>
 
       {/* Features Section */}
-      <section className="py-20 bg-white dark:bg-gray-900 transition-colors">
+          <section className="py-20 bg-white dark:gradient-purple-blue transition-colors">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">
@@ -52,7 +52,7 @@ export default function HomePage() {
 
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
             <div className="text-center">
-              <div className="bg-blue-100 dark:bg-blue-900/30 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+              <div className="bg-blue-100 dark:gradient-card w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 glass-effect hover-glow">
                 <Globe className="h-8 w-8 text-blue-600 dark:text-blue-400" />
               </div>
               <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">Global Monitoring</h3>
@@ -62,7 +62,7 @@ export default function HomePage() {
             </div>
 
             <div className="text-center">
-              <div className="bg-red-100 dark:bg-red-900/30 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+              <div className="bg-red-100 dark:gradient-card w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 glass-effect hover-glow">
                 <AlertTriangle className="h-8 w-8 text-red-600 dark:text-red-400" />
               </div>
               <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">Risk Detection</h3>
@@ -72,7 +72,7 @@ export default function HomePage() {
             </div>
 
             <div className="text-center">
-              <div className="bg-green-100 dark:bg-green-900/30 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+              <div className="bg-green-100 dark:gradient-card w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 glass-effect hover-glow">
                 <Shield className="h-8 w-8 text-green-600 dark:text-green-400" />
               </div>
               <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">Smart Mitigation</h3>
@@ -82,7 +82,7 @@ export default function HomePage() {
             </div>
 
             <div className="text-center">
-              <div className="bg-purple-100 dark:bg-purple-900/30 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+              <div className="bg-purple-100 dark:gradient-card w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 glass-effect hover-glow">
                 <BarChart3 className="h-8 w-8 text-purple-600 dark:text-purple-400" />
               </div>
               <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">Analytics Dashboard</h3>
@@ -95,7 +95,7 @@ export default function HomePage() {
       </section>
 
       {/* CTA Section */}
-      <section className="bg-gray-50 dark:bg-gray-800 py-16 transition-colors">
+          <section className="bg-gray-50 dark:gradient-card py-16 transition-colors">
         <div className="max-w-4xl mx-auto text-center px-4 sm:px-6 lg:px-8">
           <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">
             Ready to Transform Your Supply Chain Intelligence?

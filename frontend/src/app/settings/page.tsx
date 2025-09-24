@@ -10,15 +10,15 @@ function SettingsContent() {
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 min-h-full">
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900">Settings</h1>
-        <p className="text-lg text-gray-600 mt-2">
+        <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Settings</h1>
+        <p className="text-lg text-gray-600 dark:text-gray-300 mt-2">
           Manage your account settings and preferences.
         </p>
       </div>
 
       <div className="space-y-8">
         {/* Profile Section */}
-        <div className="bg-white rounded-lg shadow-sm border p-6">
+        <div className="bg-white dark:gradient-card rounded-lg shadow-sm border dark:border-slate-600/30 p-6 glass-effect hover-glow">
           <div className="flex items-center space-x-3 mb-6">
             <User className="h-6 w-6 text-blue-600" />
             <h2 className="text-xl font-semibold text-gray-900">Profile Information</h2>
@@ -85,7 +85,7 @@ function SettingsContent() {
         </div>
 
         {/* Notifications Section */}
-        <div className="bg-white rounded-lg shadow-sm border p-6">
+        <div className="bg-white dark:gradient-card rounded-lg shadow-sm border dark:border-slate-600/30 p-6 glass-effect hover-glow">
           <div className="flex items-center space-x-3 mb-6">
             <Bell className="h-6 w-6 text-blue-600" />
             <h2 className="text-xl font-semibold text-gray-900">Notification Preferences</h2>
@@ -117,7 +117,7 @@ function SettingsContent() {
         </div>
 
         {/* Security Section */}
-        <div className="bg-white rounded-lg shadow-sm border p-6">
+        <div className="bg-white dark:gradient-card rounded-lg shadow-sm border dark:border-slate-600/30 p-6 glass-effect hover-glow">
           <div className="flex items-center space-x-3 mb-6">
             <Key className="h-6 w-6 text-blue-600" />
             <h2 className="text-xl font-semibold text-gray-900">Security</h2>
