@@ -191,9 +191,97 @@ function DashboardContent() {
           </div>
         </div>
 
+        {/* Recent AI Analysis - Right under AI Risk Analyzer */}
+        <div className="recent-analysis-section relative group mb-12">
+          <div className="absolute inset-0 dark:bg-gradient-to-r dark:from-indigo-500/20 dark:via-purple-500/20 dark:to-pink-500/20 rounded-3xl blur-xl group-hover:blur-2xl transition-all duration-700"></div>
+          <div className="relative bg-white dark:bg-gray-800/50 backdrop-blur-2xl border border-slate-200 dark:border-white/30 rounded-3xl p-8">
+            
+            <div className="flex justify-between items-center mb-8">
+              <div className="flex items-center space-x-4">
+                <div className="bg-gradient-to-r from-indigo-500 to-purple-500 p-3 rounded-2xl">
+                  <FileText className="h-6 w-6 text-white" />
+                </div>
+                <div>
+                  <h2 className="text-2xl font-bold text-slate-800 dark:bg-gradient-to-r dark:from-indigo-400 dark:via-purple-400 dark:to-pink-400 dark:bg-clip-text dark:text-transparent">
+                    Recent AI Analysis
+                  </h2>
+                  <p className="text-slate-600 dark:text-white/70 text-sm">Real-time intelligent insights</p>
+                </div>
+              </div>
+              <a
+                href="/history"
+                className="group inline-flex items-center px-4 py-2 bg-gradient-to-r from-indigo-500/20 to-purple-500/20 backdrop-blur-xl border border-white/30 rounded-2xl text-white/90 hover:text-white font-medium transition-all duration-300 hover:scale-105"
+              >
+                <span>View All</span>
+                <div className="ml-2 transform group-hover:translate-x-1 transition-transform">→</div>
+              </a>
+            </div>
 
-        {/* AI-Powered Stats Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+            {historyLoading ? (
+              <div className="flex flex-col items-center justify-center py-12">
+                <div className="relative">
+                  <div className="h-16 w-16 border-4 border-purple-500/30 rounded-full animate-spin"></div>
+                  <div className="absolute top-0 left-0 h-16 w-16 border-4 border-transparent border-t-purple-500 rounded-full animate-spin"></div>
+                </div>
+                <div className="mt-6 flex items-center space-x-2 text-white/80">
+                  <span>🤖 AI Loading Analysis...</span>
+                  <div className="flex space-x-1">
+                    <div className="h-2 w-2 bg-purple-400 rounded-full animate-bounce"></div>
+                    <div className="h-2 w-2 bg-pink-400 rounded-full animate-bounce" style={{animationDelay: '0.1s'}}></div>
+                    <div className="h-2 w-2 bg-cyan-400 rounded-full animate-bounce" style={{animationDelay: '0.2s'}}></div>
+                  </div>
+                </div>
+              </div>
+            ) : queryHistory?.queries.length ? (
+              <div className="space-y-4">
+                {queryHistory.queries.slice(0, 5).map((query: Query) => (
+                  <div
+                    key={query.id}
+                    className="group relative bg-white/5 backdrop-blur-xl border border-white/20 rounded-2xl p-6 hover:bg-white/10 transition-all duration-300 transform hover:scale-[1.02]"
+                  >
+                    <div className="flex items-start justify-between">
+                      <div className="flex-1">
+                        <p className="text-white/90 mb-3 font-medium leading-relaxed">
+                          {query.question}
+                        </p>
+                        <div className="flex items-center space-x-4 text-xs text-white/60">
+                          <span className="flex items-center">
+                            <span className="mr-1">🔍</span>
+                            Query #{query.id}
+                          </span>
+                          <span className="flex items-center">
+                            <span className="mr-1">📅</span>
+                            {new Date(query.created_at).toLocaleDateString()}
+                          </span>
+                        </div>
+                      </div>
+                      <div className={`flex items-center space-x-2 px-4 py-2 rounded-full text-xs font-semibold backdrop-blur-xl border ${getStatusColor(query.status)}`}>
+                        {getStatusIcon(query.status)}
+                        <span className="capitalize">{query.status}</span>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div className="text-center py-12">
+                <div className="relative mb-6">
+                  <div className="h-24 w-24 mx-auto bg-gradient-to-r from-indigo-500/20 to-purple-500/20 rounded-full flex items-center justify-center backdrop-blur-xl border border-white/30">
+                    <FileText className="h-12 w-12 text-white/60" />
+                  </div>
+                  <div className="absolute top-0 left-1/2 transform -translate-x-1/2 h-24 w-24 bg-gradient-to-r from-indigo-500/30 to-purple-500/30 rounded-full animate-ping"></div>
+                </div>
+                <h3 className="text-xl font-bold text-white mb-2">No AI Analysis Yet</h3>
+                <p className="text-white/70 max-w-md mx-auto">
+                  🚀 Submit your first supply chain query above to unlock powerful AI insights!
+                </p>
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* AI-Powered Stats Cards - Moved to Bottom */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {/* Total Queries Card */}
               <div className="group relative">
                 <div className="absolute inset-0 dark:bg-gradient-to-r dark:from-blue-600/10 dark:to-indigo-600/10 rounded-2xl blur-xl group-hover:blur-2xl transition-all duration-500"></div>
@@ -243,96 +331,6 @@ function DashboardContent() {
                 {queryHistory?.queries.filter((q: Query) => q.status === 'processing').length || 0}
               </p>
             </div>
-          </div>
-        </div>
-
-
-            {/* Recent AI Analysis - Futuristic Design */}
-            <div className="recent-analysis-section relative group">
-              <div className="absolute inset-0 dark:bg-gradient-to-r dark:from-indigo-500/20 dark:via-purple-500/20 dark:to-pink-500/20 rounded-3xl blur-xl group-hover:blur-2xl transition-all duration-700"></div>
-              <div className="relative bg-white dark:bg-gray-800/50 backdrop-blur-2xl border border-slate-200 dark:border-white/30 rounded-3xl p-8">
-            
-            <div className="flex justify-between items-center mb-8">
-              <div className="flex items-center space-x-4">
-                <div className="bg-gradient-to-r from-indigo-500 to-purple-500 p-3 rounded-2xl">
-                  <FileText className="h-6 w-6 text-white" />
-      </div>
-                <div>
-                  <h2 className="text-2xl font-bold text-slate-800 dark:bg-gradient-to-r dark:from-indigo-400 dark:via-purple-400 dark:to-pink-400 dark:bg-clip-text dark:text-transparent">
-                    Recent AI Analysis
-        </h2>
-                  <p className="text-slate-600 dark:text-white/70 text-sm">Real-time intelligent insights</p>
-                </div>
-              </div>
-          <a
-            href="/history"
-                className="group inline-flex items-center px-4 py-2 bg-gradient-to-r from-indigo-500/20 to-purple-500/20 backdrop-blur-xl border border-white/30 rounded-2xl text-white/90 hover:text-white font-medium transition-all duration-300 hover:scale-105"
-          >
-                <span>View All</span>
-                <div className="ml-2 transform group-hover:translate-x-1 transition-transform">→</div>
-          </a>
-        </div>
-
-        {historyLoading ? (
-              <div className="flex flex-col items-center justify-center py-12">
-                <div className="relative">
-                  <div className="h-16 w-16 border-4 border-purple-500/30 rounded-full animate-spin"></div>
-                  <div className="absolute top-0 left-0 h-16 w-16 border-4 border-transparent border-t-purple-500 rounded-full animate-spin"></div>
-                </div>
-                <div className="mt-6 flex items-center space-x-2 text-white/80">
-                  <span>🤖 AI Loading Analysis...</span>
-                  <div className="flex space-x-1">
-                    <div className="h-2 w-2 bg-purple-400 rounded-full animate-bounce"></div>
-                    <div className="h-2 w-2 bg-pink-400 rounded-full animate-bounce" style={{animationDelay: '0.1s'}}></div>
-                    <div className="h-2 w-2 bg-cyan-400 rounded-full animate-bounce" style={{animationDelay: '0.2s'}}></div>
-                  </div>
-                </div>
-          </div>
-        ) : queryHistory?.queries.length ? (
-          <div className="space-y-4">
-                {queryHistory.queries.slice(0, 5).map((query: Query) => (
-              <div
-                key={query.id}
-                    className="group relative bg-white/5 backdrop-blur-xl border border-white/20 rounded-2xl p-6 hover:bg-white/10 transition-all duration-300 transform hover:scale-[1.02]"
-              >
-                <div className="flex items-start justify-between">
-                  <div className="flex-1">
-                        <p className="text-white/90 mb-3 font-medium leading-relaxed">
-                      {query.question}
-                    </p>
-                        <div className="flex items-center space-x-4 text-xs text-white/60">
-                          <span className="flex items-center">
-                            <span className="mr-1">🔍</span>
-                            Query #{query.id}
-                          </span>
-                          <span className="flex items-center">
-                            <span className="mr-1">📅</span>
-                            {new Date(query.created_at).toLocaleDateString()}
-                          </span>
-                    </div>
-                  </div>
-                      <div className={`flex items-center space-x-2 px-4 py-2 rounded-full text-xs font-semibold backdrop-blur-xl border ${getStatusColor(query.status)}`}>
-                    {getStatusIcon(query.status)}
-                    <span className="capitalize">{query.status}</span>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        ) : (
-              <div className="text-center py-12">
-                <div className="relative mb-6">
-                  <div className="h-24 w-24 mx-auto bg-gradient-to-r from-indigo-500/20 to-purple-500/20 rounded-full flex items-center justify-center backdrop-blur-xl border border-white/30">
-                    <FileText className="h-12 w-12 text-white/60" />
-                  </div>
-                  <div className="absolute top-0 left-1/2 transform -translate-x-1/2 h-24 w-24 bg-gradient-to-r from-indigo-500/30 to-purple-500/30 rounded-full animate-ping"></div>
-                </div>
-                <h3 className="text-xl font-bold text-white mb-2">No AI Analysis Yet</h3>
-                <p className="text-white/70 max-w-md mx-auto">
-                  🚀 Submit your first supply chain query above to unlock powerful AI insights!
-            </p>
-          </div>
-        )}
           </div>
         </div>
       </div>

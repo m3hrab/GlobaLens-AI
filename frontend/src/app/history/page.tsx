@@ -62,7 +62,7 @@ function HistoryContent() {
       case 'high':
         return 'text-orange-600 bg-orange-100 border-orange-200';
       case 'medium':
-        return 'text-yellow-600 bg-yellow-100 border-yellow-200';
+        return 'text-amber-800 bg-amber-200 border-amber-400 font-semibold';
       case 'low':
         return 'text-green-600 bg-green-100 border-green-200';
       default:

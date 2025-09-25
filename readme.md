@@ -7,7 +7,7 @@
 [![SmythOS](https://img.shields.io/badge/SmythOS-Agents-orange.svg)](https://smythos.com)
 [![Docker](https://img.shields.io/badge/Docker-Ready-2496ED.svg)](https://docker.com)
 
-> **Winner Solution**: Transforming global supply chain management through intelligent risk monitoring and predictive analytics.
+> Transforming global supply chain management through intelligent risk monitoring and predictive analytics.
 
 ---
 
