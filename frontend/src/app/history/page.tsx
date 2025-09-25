@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import ProtectedRoute from '@/components/ProtectedRoute';
-import { useQueryHistory, useRiskAnalysis } from '@/hooks/useQueries';
+import { useQueryHistory, useRiskAnalysis, useActionPlan } from '@/hooks/useQueries';
 import type { Query } from '@/types/api';
 import { 
   FileText, 
@@ -26,6 +26,10 @@ function HistoryContent() {
   const { data: queryHistory, isLoading } = useQueryHistory(currentPage, pageSize);
   const { data: riskAnalysis, isLoading: riskLoading } = useRiskAnalysis(
     selectedQuery || 0, 
+    !!selectedQuery
+  );
+  const { data: actionPlan, isLoading: actionPlanLoading } = useActionPlan(
+    selectedQuery || 0,
     !!selectedQuery
   );
 
@@ -175,27 +179,154 @@ function HistoryContent() {
                 </div>
               )}
 
+              {/* Route Information */}
+              {riskAnalysis.route && (
+                <div className="mb-6">
+                  <h3 className="font-semibold text-gray-900 mb-3">Route Information</h3>
+                  <div className="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 border border-blue-200 dark:border-blue-400/30 rounded-lg p-4 glass-effect">
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                      <div>
+                        <h4 className="font-medium text-blue-900 dark:text-blue-100 mb-2">Origin</h4>
+                        <div className="space-y-1">
+                          {riskAnalysis.route.origin?.map((port: string, idx: number) => (
+                            <div key={idx} className="text-sm text-blue-800 dark:text-blue-200 flex items-center">
+                              <span className="w-2 h-2 bg-blue-500 rounded-full mr-2"></span>
+                              {port}
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                      <div>
+                        <h4 className="font-medium text-blue-900 dark:text-blue-100 mb-2">Transit</h4>
+                        <div className="space-y-1">
+                          {riskAnalysis.route.transit?.map((area: string, idx: number) => (
+                            <div key={idx} className="text-sm text-blue-800 dark:text-blue-200 flex items-center">
+                              <span className="w-2 h-2 bg-indigo-500 rounded-full mr-2"></span>
+                              {area}
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                      <div>
+                        <h4 className="font-medium text-blue-900 dark:text-blue-100 mb-2">Destination</h4>
+                        <div className="space-y-1">
+                          {riskAnalysis.route.destination?.map((port: string, idx: number) => (
+                            <div key={idx} className="text-sm text-blue-800 dark:text-blue-200 flex items-center">
+                              <span className="w-2 h-2 bg-green-500 rounded-full mr-2"></span>
+                              {port}
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Risk Profile Summary */}
+              {riskAnalysis.risk_profile && (
+                <div className="mb-6">
+                  <h3 className="font-semibold text-gray-900 mb-3">Risk Profile Summary</h3>
+                  <div className="bg-gradient-to-r from-red-50 to-orange-50 dark:from-red-900/20 dark:to-orange-900/20 border border-red-200 dark:border-red-400/30 rounded-lg p-4 glass-effect">
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                      <div className="text-center">
+                        <div className="text-2xl font-bold text-red-600">{(riskAnalysis.risk_profile as any).critical || 0}</div>
+                        <div className="text-xs text-gray-600 dark:text-gray-400">Critical</div>
+                      </div>
+                      <div className="text-center">
+                        <div className="text-2xl font-bold text-orange-600">{(riskAnalysis.risk_profile as any).high || 0}</div>
+                        <div className="text-xs text-gray-600 dark:text-gray-400">High</div>
+                      </div>
+                      <div className="text-center">
+                        <div className="text-2xl font-bold text-amber-600">{(riskAnalysis.risk_profile as any).medium || 0}</div>
+                        <div className="text-xs text-gray-600 dark:text-gray-400">Medium</div>
+                      </div>
+                      <div className="text-center">
+                        <div className="text-2xl font-bold text-green-600">{(riskAnalysis.risk_profile as any).low || 0}</div>
+                        <div className="text-xs text-gray-600 dark:text-gray-400">Low</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+
               {/* Identified Risks */}
               <div>
                 <h3 className="font-semibold text-gray-900 mb-3">Identified Risks</h3>
-                <div className="space-y-3">
+                <div className="space-y-4">
                   {riskAnalysis.risks && riskAnalysis.risks.length > 0 ? (
-                    riskAnalysis.risks.map((risk, index) => (
+                    riskAnalysis.risks.map((risk: any, index: number) => (
                       <div
                         key={risk?.id || index}
                         className={`border rounded-lg p-4 glass-effect hover-glow ${getSeverityColor(risk?.severity || 'low')}`}
                       >
-                        <div className="flex items-start justify-between mb-2">
-                          <h4 className="font-medium">{risk?.title || 'Unknown Risk'}</h4>
-                          <span className="text-xs font-medium px-2 py-1 rounded-full bg-white bg-opacity-50">
-                            {risk?.severity || 'Unknown'}
-                          </span>
+                        <div className="flex items-start justify-between mb-3">
+                          <div className="flex-1">
+                            <div className="flex items-center space-x-2 mb-2">
+                              <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                                risk.type === 'geopolitical' ? 'bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-300' :
+                                risk.type === 'weather' ? 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300' :
+                                risk.type === 'security' ? 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300' :
+                                'bg-gray-100 text-gray-800 dark:bg-gray-900/30 dark:text-gray-300'
+                              }`}>
+                                {risk.type || 'Unknown'}
+                              </span>
+                              <span className="text-xs font-medium px-2 py-1 rounded-full bg-white bg-opacity-50">
+                                {risk?.severity || 'Unknown'}
+                              </span>
+                            </div>
+                            <h4 className="font-medium text-lg mb-2">{risk?.title || 'Unknown Risk'}</h4>
+                            <p className="text-sm mb-3 text-gray-700 dark:text-gray-300">{risk?.desc || risk?.description || 'No description available'}</p>
+                          </div>
                         </div>
-                        <p className="text-sm mb-2">{risk?.description || 'No description available'}</p>
-                        <div className="flex items-center justify-between text-xs">
-                          <span>Confidence: {Math.round((risk?.confidence || 0) * 100)}%</span>
-                          <span>Locations: {risk?.locations_affected?.join(', ') || 'Not specified'}</span>
+                        
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-3">
+                          <div>
+                            <span className="text-xs font-medium text-gray-600 dark:text-gray-400">Confidence: </span>
+                            <span className="text-sm font-semibold text-blue-600 dark:text-blue-400">
+                              {Math.round((risk?.confidence || 0) * 100)}%
+                            </span>
+                          </div>
+                          <div>
+                            <span className="text-xs font-medium text-gray-600 dark:text-gray-400">Last Update: </span>
+                            <span className="text-sm text-gray-700 dark:text-gray-300">
+                              {risk?.last_update ? new Date(risk.last_update).toLocaleDateString() : 'Unknown'}
+                            </span>
+                          </div>
                         </div>
+
+                        {risk?.locations && risk.locations.length > 0 && (
+                          <div className="mb-3">
+                            <span className="text-xs font-medium text-gray-600 dark:text-gray-400">Locations: </span>
+                            <div className="flex flex-wrap gap-1 mt-1">
+                              {risk.locations.map((location: string, idx: number) => (
+                                <span key={idx} className="text-xs bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 px-2 py-1 rounded">
+                                  {location}
+                                </span>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+
+                        {risk?.sources && risk.sources.length > 0 && (
+                          <div>
+                            <span className="text-xs font-medium text-gray-600 dark:text-gray-400">Sources: </span>
+                            <div className="mt-1">
+                              {risk.sources.map((source: any, idx: number) => (
+                                <a 
+                                  key={idx}
+                                  href={source.url} 
+                                  target="_blank" 
+                                  rel="noopener noreferrer"
+                                  className="text-xs text-blue-600 dark:text-blue-400 hover:underline mr-2"
+                                >
+                                  {source.name}
+                                  {idx < risk.sources.length - 1 && ', '}
+                                </a>
+                              ))}
+                            </div>
+                          </div>
+                        )}
                       </div>
                     ))
                   ) : (
@@ -204,22 +335,159 @@ function HistoryContent() {
                 </div>
               </div>
 
+              {/* Action Plan Summary */}
+              {actionPlan?.summary && (
+                <div className="mb-6">
+                  <h3 className="font-semibold text-gray-900 mb-3">Action Plan Summary</h3>
+                  <div className="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 border border-blue-200 dark:border-blue-400/30 rounded-lg p-4 glass-effect">
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
+                      {actionPlan.summary.total_risks && typeof actionPlan.summary.total_risks === 'object' ? (
+                        <>
+                          <div className="text-center">
+                            <div className="text-2xl font-bold text-red-600">{(actionPlan.summary.total_risks as any).critical || 0}</div>
+                            <div className="text-xs text-gray-600 dark:text-gray-400">Critical</div>
+                          </div>
+                          <div className="text-center">
+                            <div className="text-2xl font-bold text-orange-600">{(actionPlan.summary.total_risks as any).high || 0}</div>
+                            <div className="text-xs text-gray-600 dark:text-gray-400">High</div>
+                          </div>
+                          <div className="text-center">
+                            <div className="text-2xl font-bold text-amber-600">{(actionPlan.summary.total_risks as any).medium || 0}</div>
+                            <div className="text-xs text-gray-600 dark:text-gray-400">Medium</div>
+                          </div>
+                          <div className="text-center">
+                            <div className="text-2xl font-bold text-green-600">{(actionPlan.summary.total_risks as any).low || 0}</div>
+                            <div className="text-xs text-gray-600 dark:text-gray-400">Low</div>
+                          </div>
+                        </>
+                      ) : null}
+                    </div>
+                    {(actionPlan.summary as any).priority_focus && (
+                      <div className="mb-3">
+                        <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Priority Focus: </span>
+                        <span className="text-sm text-gray-600 dark:text-gray-400">{(actionPlan.summary as any).priority_focus}</span>
+                      </div>
+                    )}
+                    {(actionPlan.summary as any).top_affected_locations && Array.isArray((actionPlan.summary as any).top_affected_locations) && (actionPlan.summary as any).top_affected_locations.length > 0 && (
+                      <div>
+                        <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Top Affected Locations: </span>
+                        <span className="text-sm text-gray-600 dark:text-gray-400">
+                          {(actionPlan.summary as any).top_affected_locations.join(', ')}
+                        </span>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
+
               {/* Recommended Actions */}
               <div>
                 <h3 className="font-semibold text-gray-900 mb-3">Recommended Actions</h3>
                 <div className="space-y-3">
-                  {riskAnalysis.recommended_actions && riskAnalysis.recommended_actions.length > 0 ? (
-                    riskAnalysis.recommended_actions.map((action, index) => (
-                      <div key={index} className="bg-green-50 dark:gradient-card border border-green-200 dark:border-green-400/30 rounded-lg p-4 glass-effect hover-glow">
-                        <h4 className="font-medium text-green-900 mb-1">{action?.action || 'Recommended Action'}</h4>
-                        <p className="text-sm text-green-800">{action?.details || 'No details available'}</p>
+                  {riskAnalysis.actions && riskAnalysis.actions.length > 0 ? (
+                    riskAnalysis.actions.map((action: any, index: number) => (
+                      <div key={index} className="bg-gradient-to-r from-green-50 to-blue-50 dark:from-green-900/20 dark:to-blue-900/20 border border-green-200 dark:border-green-400/30 rounded-lg p-4 glass-effect hover-glow">
+                        <div className="flex items-start justify-between mb-2">
+                          <div className="flex items-center space-x-2">
+                            <span className="bg-green-500 text-white text-xs font-bold px-2 py-1 rounded-full">
+                              #{index + 1}
+                            </span>
+                            <h4 className="font-medium text-green-900 dark:text-green-100">
+                              {action.action || 'Recommended Action'}
+                            </h4>
+                          </div>
+                        </div>
+                        <p className="text-sm text-green-800 dark:text-green-200">
+                          {action.details || action.description || 'No details available'}
+                        </p>
+                      </div>
+                    ))
+                  ) : actionPlanLoading ? (
+                    <div className="flex items-center justify-center py-4">
+                      <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-600"></div>
+                      <span className="ml-2 text-gray-600">Loading action plan...</span>
+                    </div>
+                  ) : actionPlan?.prioritized_actions && actionPlan.prioritized_actions.length > 0 ? (
+                    actionPlan.prioritized_actions.map((action: any, index: number) => (
+                      <div key={index} className="bg-gradient-to-r from-green-50 to-blue-50 dark:from-green-900/20 dark:to-blue-900/20 border border-green-200 dark:border-green-400/30 rounded-lg p-4 glass-effect hover-glow">
+                        <div className="flex items-start justify-between mb-2">
+                          <div className="flex items-center space-x-2">
+                            <span className="bg-blue-500 text-white text-xs font-bold px-2 py-1 rounded-full">
+                              #{action.priority}
+                            </span>
+                            <h4 className="font-medium text-green-900 dark:text-green-100">
+                              {action.action || 'Recommended Action'}
+                            </h4>
+                          </div>
+                          <span className={`text-xs px-2 py-1 rounded-full font-medium ${
+                            action.estimated_impact === 'high' 
+                              ? 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300'
+                              : action.estimated_impact === 'medium'
+                              ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-300'
+                              : 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300'
+                          }`}>
+                            {action.estimated_impact || 'medium'} impact
+                          </span>
+                        </div>
+                        <p className="text-sm text-green-800 dark:text-green-200 mb-3">
+                          {action.description || 'No details available'}
+                        </p>
+                        {action.target_risks && action.target_risks.length > 0 && (
+                          <div className="mb-2">
+                            <span className="text-xs font-medium text-gray-600 dark:text-gray-400">Target Risks: </span>
+                            <span className="text-xs text-gray-700 dark:text-gray-300">
+                              {action.target_risks.join(', ')}
+                            </span>
+                          </div>
+                        )}
+                        {action.sources && action.sources.length > 0 && (
+                          <div className="text-xs text-gray-500 dark:text-gray-400">
+                            <span className="font-medium">Sources: </span>
+                            {action.sources.map((source: any, idx: number) => (
+                              <a 
+                                key={idx}
+                                href={source.url} 
+                                target="_blank" 
+                                rel="noopener noreferrer"
+                                className="text-blue-600 dark:text-blue-400 hover:underline ml-1"
+                              >
+                                {source.name}
+                                {idx < action.sources.length - 1 && ', '}
+                              </a>
+                            ))}
+                          </div>
+                        )}
                       </div>
                     ))
                   ) : (
-                    <p className="text-gray-500 text-center py-4">No recommendations available</p>
+                    <p className="text-gray-500 text-center py-4">No recommended actions available</p>
                   )}
                 </div>
               </div>
+
+              {/* Top Sources */}
+              {riskAnalysis.top_sources && riskAnalysis.top_sources.length > 0 && (
+                <div>
+                  <h3 className="font-semibold text-gray-900 mb-3">Top Sources</h3>
+                  <div className="bg-gradient-to-r from-gray-50 to-slate-50 dark:from-gray-900/20 dark:to-slate-900/20 border border-gray-200 dark:border-gray-400/30 rounded-lg p-4 glass-effect">
+                    <div className="space-y-2">
+                      {riskAnalysis.top_sources.map((source: any, index: number) => (
+                        <div key={index} className="flex items-center justify-between">
+                          <span className="text-sm text-gray-700 dark:text-gray-300">{source.name}</span>
+                          <a 
+                            href={source.url} 
+                            target="_blank" 
+                            rel="noopener noreferrer"
+                            className="text-xs text-blue-600 dark:text-blue-400 hover:underline"
+                          >
+                            View Source →
+                          </a>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
           ) : (
             <div className="text-center py-8">
