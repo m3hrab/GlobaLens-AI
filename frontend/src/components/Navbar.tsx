@@ -27,34 +27,59 @@ const Navbar = () => {
             </Link>
           </div>
 
-          {/* Center: Navigation Links */}
-          <div className="flex items-center space-x-2">
+          {/* Center: Navigation Links (only for authenticated users) */}
+          {isAuthenticated && (
+            <div className="flex items-center space-x-2">
+              <Link
+                href="/"
+                className="flex items-center space-x-2 text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 px-4 py-2 rounded-lg text-sm font-medium hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-all duration-200"
+              >
+                <Home className="h-4 w-4" />
+                <span>Home</span>
+              </Link>
+              <Link
+                href="/dashboard"
+                className="flex items-center space-x-2 text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 px-4 py-2 rounded-lg text-sm font-medium hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-all duration-200"
+              >
+                <BarChart3 className="h-4 w-4" />
+                <span>Dashboard</span>
+              </Link>
+              <Link
+                href="/history"
+                className="flex items-center space-x-2 text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 px-4 py-2 rounded-lg text-sm font-medium hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-all duration-200"
+              >
+                <History className="h-4 w-4" />
+                <span>History</span>
+              </Link>
+            </div>
+          )}
+
+          {/* Right: Theme Toggle, Login/Signup (for non-authenticated) or User Info + Logout (for authenticated) */}
+          <div className="flex items-center space-x-4">
             {isAuthenticated ? (
               <>
-                <Link
-                  href="/"
-                  className="flex items-center space-x-2 text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 px-4 py-2 rounded-lg text-sm font-medium hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-all duration-200"
+                <div className="flex items-center space-x-2 px-3 py-2 bg-gray-50 dark:bg-slate-800 rounded-lg">
+                  <div className="h-6 w-6 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-full flex items-center justify-center">
+                    <span className="text-xs font-semibold text-white">
+                      {user?.name?.charAt(0).toUpperCase()}
+                    </span>
+                  </div>
+                  <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                    {user?.name}
+                  </span>
+                </div>
+                <ThemeToggle />
+                <button
+                  onClick={logout}
+                  className="flex items-center space-x-2 text-gray-700 dark:text-gray-300 hover:text-red-600 dark:hover:text-red-400 px-4 py-2 rounded-lg text-sm font-medium hover:bg-red-50 dark:hover:bg-red-900/20 transition-all duration-200"
                 >
-                  <Home className="h-4 w-4" />
-                  <span>Home</span>
-                </Link>
-                <Link
-                  href="/dashboard"
-                  className="flex items-center space-x-2 text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 px-4 py-2 rounded-lg text-sm font-medium hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-all duration-200"
-                >
-                  <BarChart3 className="h-4 w-4" />
-                  <span>Dashboard</span>
-                </Link>
-                <Link
-                  href="/history"
-                  className="flex items-center space-x-2 text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 px-4 py-2 rounded-lg text-sm font-medium hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-all duration-200"
-                >
-                  <History className="h-4 w-4" />
-                  <span>History</span>
-                </Link>
+                  <LogOut className="h-4 w-4" />
+                  <span>Logout</span>
+                </button>
               </>
             ) : (
               <>
+                <ThemeToggle />
                 <Link
                   href="/login"
                   className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 px-4 py-2 rounded-lg text-sm font-medium hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-all duration-200"
@@ -68,32 +93,6 @@ const Navbar = () => {
                   Sign Up
                 </Link>
               </>
-            )}
-          </div>
-
-          {/* Right: User Info, Theme Toggle, and Logout */}
-          <div className="flex items-center space-x-4">
-            {isAuthenticated && (
-              <div className="flex items-center space-x-2 px-3 py-2 bg-gray-50 dark:bg-slate-800 rounded-lg">
-                <div className="h-6 w-6 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-full flex items-center justify-center">
-                  <span className="text-xs font-semibold text-white">
-                    {user?.name?.charAt(0).toUpperCase()}
-                  </span>
-                </div>
-                <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                  {user?.name}
-                </span>
-              </div>
-            )}
-            <ThemeToggle />
-            {isAuthenticated && (
-              <button
-                onClick={logout}
-                className="flex items-center space-x-2 text-gray-700 dark:text-gray-300 hover:text-red-600 dark:hover:text-red-400 px-4 py-2 rounded-lg text-sm font-medium hover:bg-red-50 dark:hover:bg-red-900/20 transition-all duration-200"
-              >
-                <LogOut className="h-4 w-4" />
-                <span>Logout</span>
-              </button>
             )}
           </div>
         </div>
