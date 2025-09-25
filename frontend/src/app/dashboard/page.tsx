@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import ProtectedRoute from '@/components/ProtectedRoute';
 import { useNotifications } from '@/contexts/NotificationContext';
 import { useCreateQuery, useQueryHistory } from '@/hooks/useQueries';
-import { Search, FileText, Clock, CheckCircle, AlertCircle, Loader, TrendingUp } from 'lucide-react';
+import { Bot, FileText, Clock, CheckCircle, AlertCircle, Loader, TrendingUp } from 'lucide-react';
 import type { Query } from '@/types/api';
 
 function DashboardContent() {
@@ -107,7 +107,7 @@ function DashboardContent() {
               <div className="relative inline-block mb-4">
                 <div className="absolute inset-0 dark:bg-gradient-to-r dark:from-blue-500 dark:to-purple-500 rounded-2xl blur-lg opacity-30"></div>
                 <div className="relative bg-blue-600 dark:bg-gradient-to-r dark:from-blue-600 dark:to-purple-600 p-4 rounded-2xl shadow-lg">
-                  <Search className="h-8 w-8 text-white" />
+                  <Bot className="h-8 w-8 text-white animate-pulse hover:animate-bounce transition-all duration-300" />
                 </div>
                 <div className="absolute -top-1 -right-1 h-3 w-3 bg-green-400 rounded-full animate-pulse"></div>
               </div>
@@ -146,10 +146,10 @@ function DashboardContent() {
                 </label>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                   {[
-                    "What are the current risks for shipping from China to USA?",
-                    "How is the weather affecting shipping routes in the Pacific?",
-                    "What are the geopolitical risks in the Middle East?",
-                    "How is the Suez Canal situation impacting global trade?"
+                    "Assess current risks for container shipping from Chittagong (Bangladesh) to Shanghai (China) through the Malacca Strait, considering monsoon weather, piracy incidents, and port congestion.",
+                    "Check supply-chain risks for shipping from Port of Rotterdam to New York Port, focusing on Atlantic storm activity and US East Coast labor disputes",
+                    "Evaluate risks for cargo transiting Singapore en route to Sydney, including potential cyberattacks on port infrastructure, regional haze weather, and container shortage issues",
+                    "Report current supply-chain risks for shipments leaving Hamburg Port, with emphasis on recent dockworker strikes and their expected impact over the next week"
                   ].map((suggestion, index) => (
                     <button
                       key={index}
@@ -180,7 +180,7 @@ function DashboardContent() {
                       </>
                     ) : (
                       <>
-                        <Search className="h-4 w-4 text-white" />
+                        <Bot className="h-4 w-4 text-white" />
                         <span className="text-white">Launch AI Analysis</span>
                       </>
                     )}

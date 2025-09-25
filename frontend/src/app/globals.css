@@ -109,6 +109,27 @@ html.dark a[href*="/settings"].bg-gradient-to-r {
   border-right-color: #6b7280 !important;
 }
 
+/* Fix Recent AI Analysis section text colors in light mode */
+html:not(.dark) .recent-analysis-section h2,
+html:not(.dark) .recent-analysis-section p,
+html:not(.dark) .recent-analysis-section span {
+  color: #1f2937 !important;
+}
+
+html:not(.dark) .recent-analysis-section .text-white\/90,
+html:not(.dark) .recent-analysis-section .text-white\/70,
+html:not(.dark) .recent-analysis-section .text-white\/60 {
+  color: #374151 !important;
+}
+
+html:not(.dark) .recent-analysis-section .text-white {
+  color: #1f2937 !important;
+}
+
+html:not(.dark) .recent-analysis-section .text-white\/80 {
+  color: #4b5563 !important;
+}
+
 /* Custom scrollbar */
 ::-webkit-scrollbar {
   width: 6px;
