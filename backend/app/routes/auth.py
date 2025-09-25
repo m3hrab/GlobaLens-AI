@@ -75,7 +75,7 @@ async def signup(user_data: UserCreate, db: Session = Depends(get_db)):
         access_token=access_token,
         token_type="bearer",
         expires_in=settings.access_token_expire_minutes * 60,
-        user=UserResponse.from_orm(db_user)
+        user=UserResponse.model_validate(db_user)
     )
 
 
@@ -121,7 +121,7 @@ async def login(user_credentials: UserLogin, db: Session = Depends(get_db)):
         access_token=access_token,
         token_type="bearer",
         expires_in=settings.access_token_expire_minutes * 60,
-        user=UserResponse.from_orm(user)
+        user=UserResponse.model_validate(user)
     )
 
 
@@ -136,7 +136,7 @@ async def get_current_user_info(current_user: User = Depends(get_current_user)):
     Returns:
         UserResponse: Current user information
     """
-    return UserResponse.from_orm(current_user)
+    return UserResponse.model_validate(current_user)
 
 
 @router.post("/refresh", response_model=Token)
@@ -160,5 +160,5 @@ async def refresh_token(current_user: User = Depends(get_current_user)):
         access_token=access_token,
         token_type="bearer",
         expires_in=settings.access_token_expire_minutes * 60,
-        user=UserResponse.from_orm(current_user)
+        user=UserResponse.model_validate(current_user)
     )
