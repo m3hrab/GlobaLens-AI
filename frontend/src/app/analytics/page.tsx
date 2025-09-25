@@ -1,13 +1,11 @@
 'use client';
 
 import ProtectedRoute from '@/components/ProtectedRoute';
-import { useAuth } from '@/contexts/AuthContext';
 import { useQueryHistory } from '@/hooks/useQueries';
 import { TrendingUp, Calendar, BarChart3, PieChart, LineChart, Activity } from 'lucide-react';
 import type { Query } from '@/types/api';
 
 function AnalyticsContent() {
-  const { user } = useAuth();
   const { data: queryHistory, isLoading: historyLoading } = useQueryHistory(1, 100);
 
   // Process data for charts
@@ -290,7 +288,7 @@ function AnalyticsContent() {
                 </div>
                 <h3 className="text-2xl font-bold text-slate-800 dark:text-white mb-2">Advanced Analytics Coming Soon</h3>
                 <p className="text-slate-600 dark:text-gray-300 max-w-2xl mx-auto">
-                  We're working on advanced charting capabilities including interactive graphs, 
+                  We&apos;re working on advanced charting capabilities including interactive graphs, 
                   trend analysis, and detailed reporting features. Stay tuned for more powerful analytics!
                 </p>
               </div>

@@ -51,6 +51,15 @@ export interface RiskAnalysis {
   generated_at: string;
 }
 
+export interface ActionPlan {
+  query_id: number;
+  report_id: number;
+  summary: Record<string, unknown>;
+  prioritized_actions: Array<Record<string, unknown>>;
+  confidence_score?: number;
+  generated_at: string;
+}
+
 export interface CreateQueryRequest {
   question: string;
 }

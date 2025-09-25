@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { ArrowRight, Shield, BarChart3, Globe, AlertTriangle, TrendingUp, Clock, Users, Zap, Target, CheckCircle, Star, MapPin, Cloud, Ship, Factory } from 'lucide-react';
+import { ArrowRight, Shield, BarChart3, Globe, AlertTriangle, TrendingUp, Zap, Target, Star, MapPin, Cloud, Ship, Factory } from 'lucide-react';
 
 export default function HomePage() {
   return (
@@ -345,7 +345,7 @@ export default function HomePage() {
                 </div>
               </div>
               <p className="text-gray-600 dark:text-gray-300 mb-6">
-                "GlobaLens AI helped us avoid a major disruption when Hurricane Maria was approaching. The early warning system saved us millions in potential losses."
+                &ldquo;GlobaLens AI helped us avoid a major disruption when Hurricane Maria was approaching. The early warning system saved us millions in potential losses.&rdquo;
               </p>
               <div className="flex items-center">
                 <div className="bg-blue-500 w-12 h-12 rounded-full flex items-center justify-center mr-4">
@@ -367,7 +367,7 @@ export default function HomePage() {
                 </div>
               </div>
               <p className="text-gray-600 dark:text-gray-300 mb-6">
-                "The AI predictions are incredibly accurate. We've reduced our supply chain risks by 85% since implementing GlobaLens AI."
+                &ldquo;The AI predictions are incredibly accurate. We&apos;ve reduced our supply chain risks by 85% since implementing GlobaLens AI.&rdquo;
               </p>
               <div className="flex items-center">
                 <div className="bg-green-500 w-12 h-12 rounded-full flex items-center justify-center mr-4">
@@ -389,7 +389,7 @@ export default function HomePage() {
                 </div>
               </div>
               <p className="text-gray-600 dark:text-gray-300 mb-6">
-                "Real-time monitoring and predictive analytics have revolutionized how we manage our global operations. Highly recommended!"
+                &ldquo;Real-time monitoring and predictive analytics have revolutionized how we manage our global operations. Highly recommended!&rdquo;
               </p>
               <div className="flex items-center">
                 <div className="bg-purple-500 w-12 h-12 rounded-full flex items-center justify-center mr-4">

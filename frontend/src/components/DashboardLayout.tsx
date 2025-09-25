@@ -13,7 +13,6 @@ import {
   X,
   User,
   Settings,
-  Bell,
   Search,
   TrendingUp
 } from 'lucide-react';

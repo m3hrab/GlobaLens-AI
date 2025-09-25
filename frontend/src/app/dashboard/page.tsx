@@ -2,17 +2,14 @@
 
 import { useState, useEffect } from 'react';
 import ProtectedRoute from '@/components/ProtectedRoute';
-import { useAuth } from '@/contexts/AuthContext';
 import { useNotifications } from '@/contexts/NotificationContext';
 import { useCreateQuery, useQueryHistory } from '@/hooks/useQueries';
 import { Search, FileText, Clock, CheckCircle, AlertCircle, Loader, TrendingUp } from 'lucide-react';
 import type { Query } from '@/types/api';
 
 function DashboardContent() {
-  const { user } = useAuth();
   const { addNotification } = useNotifications();
   const [question, setQuestion] = useState('');
-  const [showResults, setShowResults] = useState(false);
   
   const createQueryMutation = useCreateQuery();
   const { data: queryHistory, isLoading: historyLoading, refetch: refetchHistory } = useQueryHistory(1, 5);
@@ -21,7 +18,6 @@ function DashboardContent() {
   useEffect(() => {
     if (queryHistory?.queries) {
       const completedQueries = queryHistory.queries.filter((q: Query) => q.status === 'completed');
-      const processingQueries = queryHistory.queries.filter((q: Query) => q.status === 'processing');
       
       // Check for newly completed queries (this is a simple implementation)
       // In a real app, you'd want to track which queries were previously processing
@@ -45,7 +41,6 @@ function DashboardContent() {
     try {
       await createQueryMutation.mutateAsync({ question });
       setQuestion('');
-      setShowResults(true);
       
       // Add notification for analysis started
       addNotification({
