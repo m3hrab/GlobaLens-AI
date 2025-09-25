@@ -17,14 +17,17 @@ class Settings(BaseSettings):
     # Security
     secret_key: str = "globallens-ai-hackathon-secret-key-2025"
     algorithm: str = "HS256"
-    access_token_expire_minutes: int = 30
+    access_token_expire_minutes: int = 120
     
     # Database
     database_url: str = "sqlite:///./globallens.db"
     
     # SmythOS Agent URLs - Updated with deployed agents and correct endpoints
-    web_risk_monitor_url: str = "https://cmfx0m6pd1z1o23quzznwufz2.agent.pa.smyth.ai/api/analyze_route_risks"
-    action_plan_agent_url: str = "https://cmfxm82uq3jcb2py5aawkp62d.agent.pa.smyth.ai/api/generate_action_plan"
+    # web_risk_monitor_url: str = "https://cmfx0m6pd1z1o23quzznwufz2.agent.pa.smyth.ai/api/analyze_route_risks"
+    # action_plan_agent_url: str = "https://cmfxm82uq3jcb2py5aawkp62d.agent.pa.smyth.ai/api/generate_action_plan"
+
+    web_risk_monitor_url: str = "https://cmfyuk4j27z4z23qu4h1cpox5.agent.pa.smyth.ai/api/analyze_route_risks"
+    action_plan_agent_url: str = "https://cmfyund3185gi2py5twsqeqag.agent.pa.smyth.ai/api/generate_action_plan"
     
     # HTTP Client Settings
     agent_timeout: int = 60

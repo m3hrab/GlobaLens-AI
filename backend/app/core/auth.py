@@ -16,7 +16,7 @@ from app.models.user import User
 from app.schemas.user import TokenData
 
 # Password hashing context
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto", bcrypt__rounds=12)
 
 # HTTP Bearer token scheme
 security = HTTPBearer()

@@ -14,7 +14,7 @@ const LayoutWrapper = ({ children }: LayoutWrapperProps) => {
   const pathname = usePathname();
 
   // Pages that should use the dashboard layout
-  const dashboardPages = ['/dashboard', '/history', '/settings'];
+  const dashboardPages = ['/dashboard', '/history', '/analytics', '/settings'];
   const shouldUseDashboardLayout = isAuthenticated && dashboardPages.some(page => pathname.startsWith(page));
 
   if (shouldUseDashboardLayout) {
@@ -23,7 +23,7 @@ const LayoutWrapper = ({ children }: LayoutWrapperProps) => {
 
   // Default layout with navbar for public pages
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors">
+        <div className="min-h-screen bg-gray-50 dark:gradient-purple-blue transition-colors">
       <Navbar />
       <main className="min-h-[calc(100vh-4rem)]">{children}</main>
     </div>

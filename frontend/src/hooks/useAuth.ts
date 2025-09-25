@@ -3,7 +3,7 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { authApi } from '../lib/api';
 import { LoginRequest, SignupRequest } from '@/types/auth';
-import { storeAuthData } from '@/lib/auth';
+import { setAuthData } from '../lib/auth';
 import { useAuth } from '@/contexts/AuthContext';
 
 export const useLogin = () => {
@@ -12,7 +12,7 @@ export const useLogin = () => {
   return useMutation({
     mutationFn: (data: LoginRequest) => authApi.login(data),
     onSuccess: (authResponse) => {
-      storeAuthData(authResponse.access_token, authResponse.user);
+      setAuthData(authResponse.access_token, authResponse.user);
       setUser(authResponse.user);
     },
   });
@@ -24,7 +24,7 @@ export const useSignup = () => {
   return useMutation({
     mutationFn: (data: SignupRequest) => authApi.signup(data),
     onSuccess: (authResponse) => {
-      storeAuthData(authResponse.access_token, authResponse.user);
+      setAuthData(authResponse.access_token, authResponse.user);
       setUser(authResponse.user);
     },
   });

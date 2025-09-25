@@ -56,7 +56,8 @@ html {
 }
 
 html.dark {
-  background: #0f172a !important;
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 25%, #334155 50%, #1e293b 75%, #0f172a 100%) !important;
+  background-attachment: fixed;
   color: white !important;
 }
 
@@ -65,15 +66,18 @@ html.dark * {
 }
 
 html.dark [class*="bg-white"] {
-  background: #1f2937 !important;
+  background: rgba(15, 23, 42, 0.8) !important;
+  backdrop-filter: blur(10px);
 }
 
 html.dark [class*="bg-gray-50"] {
-  background: #111827 !important;
+  background: rgba(30, 41, 59, 0.6) !important;
+  backdrop-filter: blur(10px);
 }
 
 html.dark [class*="bg-gray-100"] {
-  background: #1f2937 !important;
+  background: rgba(51, 65, 85, 0.4) !important;
+  backdrop-filter: blur(10px);
 }
 
 html.dark [class*="text-gray-900"] {
@@ -94,6 +98,15 @@ html.dark [class*="text-gray-500"] {
 
 html.dark [class*="border-gray"] {
   border-color: #4b5563 !important;
+}
+
+/* Force black background for active sidebar items in dark mode */
+html.dark a[href*="/dashboard"].bg-gradient-to-r,
+html.dark a[href*="/history"].bg-gradient-to-r,
+html.dark a[href*="/settings"].bg-gradient-to-r {
+  background: #000000 !important;
+  color: #ffffff !important;
+  border-right-color: #6b7280 !important;
 }
 
 /* Custom scrollbar */
@@ -124,6 +137,84 @@ html.dark [class*="border-gray"] {
   animation: fadeIn 0.3s ease-out;
 }
 
+/* AI Dashboard Animations */
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+}
+
+@keyframes glow {
+  0%, 100% { box-shadow: 0 0 20px rgba(147, 51, 234, 0.5); }
+  50% { box-shadow: 0 0 40px rgba(147, 51, 234, 0.8), 0 0 60px rgba(147, 51, 234, 0.6); }
+}
+
+@keyframes gradientShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@keyframes matrix {
+  0% { opacity: 0; transform: translateY(-10px); }
+  50% { opacity: 1; transform: translateY(0px); }
+  100% { opacity: 0; transform: translateY(10px); }
+}
+
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+.animate-glow {
+  animation: glow 2s ease-in-out infinite alternate;
+}
+
+.animate-gradient {
+  background-size: 400% 400%;
+  animation: gradientShift 6s ease infinite;
+}
+
+.animate-matrix {
+  animation: matrix 3s ease-in-out infinite;
+}
+
+/* Professional glass effect */
+.glass-effect {
+  background: rgba(15, 23, 42, 0.15);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(71, 85, 105, 0.3);
+  box-shadow: 0 8px 32px 0 rgba(15, 23, 42, 0.37);
+}
+
+/* Professional subtle text effect */
+.neon-text {
+  text-shadow: 
+    0 0 5px rgba(71, 85, 105, 0.5),
+    0 0 10px rgba(71, 85, 105, 0.3),
+    0 0 15px rgba(71, 85, 105, 0.2);
+}
+
+/* Professional Gradient Backgrounds */
+.gradient-purple-blue {
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 25%, #334155 50%, #1e293b 75%, #0f172a 100%);
+}
+
+.gradient-card {
+  background: linear-gradient(145deg, rgba(15, 23, 42, 0.8) 0%, rgba(30, 41, 59, 0.6) 50%, rgba(51, 65, 85, 0.4) 100%);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(71, 85, 105, 0.3);
+}
+
+.gradient-border {
+  border: 1px solid;
+  border-image: linear-gradient(45deg, #475569, #64748b, #94a3b8) 1;
+}
+
+.hover-glow:hover {
+  box-shadow: 0 0 20px rgba(71, 85, 105, 0.2), 0 0 40px rgba(100, 116, 139, 0.1);
+  transform: translateY(-2px);
+  transition: all 0.3s ease;
+}
+
 /* Loading states */
 .skeleton {
   background: hsl(var(--muted));
@@ -134,4 +225,110 @@ html.dark [class*="border-gray"] {
 @keyframes pulse {
   0%, 100% { opacity: 1; }
   50% { opacity: 0.5; }
+}
+
+/* Force notification panel visibility in dark mode */
+html.dark .notification-panel {
+  background: #1e293b !important;
+  border-color: #475569 !important;
+  color: #f8fafc !important;
+  z-index: 9999 !important;
+}
+
+html.dark .notification-panel * {
+  color: inherit !important;
+}
+
+html.dark .notification-panel .notification-item {
+  background: rgba(30, 41, 59, 0.8) !important;
+  border-color: #475569 !important;
+}
+
+html.dark .notification-panel .notification-item:hover {
+  background: rgba(51, 65, 85, 0.8) !important;
+}
+
+/* Force light mode dashboard styling */
+html:not(.dark) .dashboard-page {
+  background: #f1f5f9 !important;
+  color: #0f172a !important;
+}
+
+html:not(.dark) .dashboard-page * {
+  color: inherit !important;
+}
+
+html:not(.dark) .dashboard-page .ai-analyzer-section {
+  background: linear-gradient(145deg, #ffffff 0%, #f8fafc 50%, #f1f5f9 100%) !important;
+  border-color: #cbd5e1 !important;
+  color: #0f172a !important;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1) !important;
+}
+
+html:not(.dark) .dashboard-page .stats-card {
+  background: #ffffff !important;
+  border-color: #cbd5e1 !important;
+  color: #0f172a !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08) !important;
+}
+
+html:not(.dark) .dashboard-page .stats-card:hover {
+  background: #f8fafc !important;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12) !important;
+}
+
+html:not(.dark) .dashboard-page .recent-analysis-section {
+  background: #ffffff !important;
+  border-color: #cbd5e1 !important;
+  color: #0f172a !important;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1) !important;
+}
+
+html:not(.dark) .dashboard-page .recent-analysis-section:hover {
+  background: #f8fafc !important;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15) !important;
+}
+
+html:not(.dark) .dashboard-page .gradient-text {
+  background: linear-gradient(135deg, #2563eb 0%, #7c3aed 50%, #db2777 100%) !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  color: transparent !important;
+}
+
+html:not(.dark) .dashboard-page .glass-effect {
+  background: #ffffff !important;
+  backdrop-filter: blur(20px) !important;
+  border: 1px solid #cbd5e1 !important;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1) !important;
+}
+
+/* Enhanced text colors for light mode */
+html:not(.dark) .dashboard-page h1,
+html:not(.dark) .dashboard-page h2,
+html:not(.dark) .dashboard-page h3 {
+  color: #0f172a !important;
+}
+
+html:not(.dark) .dashboard-page p,
+html:not(.dark) .dashboard-page span {
+  color: #334155 !important;
+}
+
+html:not(.dark) .dashboard-page .text-slate-300 {
+  color: #64748b !important;
+}
+
+html:not(.dark) .dashboard-page .text-white {
+  color: #0f172a !important;
+}
+
+/* Custom class for black background in dark mode */
+.dashboard-main-content {
+  background: transparent;
+}
+
+html.dark .dashboard-main-content {
+  background: #000000 !important;
 }
