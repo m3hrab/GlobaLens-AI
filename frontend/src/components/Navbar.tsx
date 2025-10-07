@@ -22,7 +22,7 @@ const Navbar = () => {
                 </div>
               </div>
               <span className="text-xl font-bold bg-gradient-to-r from-gray-900 to-gray-700 dark:from-white dark:to-gray-200 bg-clip-text text-transparent">
-                GlobaLens Ai
+                GlobaLens AI
               </span>
             </Link>
           </div>
