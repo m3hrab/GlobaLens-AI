@@ -1,4 +1,4 @@
-# 🌐 GlobaLens AI
+# GlobaLens AI
 
 **Real-time, multi-agent AI platform for global supply chain risk monitoring and predictive insights.**
 
@@ -11,7 +11,7 @@
 
 ---
 
-## 🚀 **Elevator Pitch**
+## **Elevator Pitch**
 
 **GlobaLens AI** revolutionizes supply chain risk management by providing **instant, actionable intelligence** to logistics professionals worldwide. 
 
@@ -21,20 +21,20 @@ Our **SmythOS-powered multi-agent system** continuously monitors global news, we
 
 ---
 
-## ✨ **Key Features**
+##  **Key Features**
 
-### 🤖 **SmythOS Multi-Agent Intelligence**
+###  **SmythOS Multi-Agent Intelligence**
 - **Web Risk Monitor Agent** - Real-time data aggregation from 50+ sources
 - **Action Plan Generator** - AI-powered mitigation strategy recommendations
 - **Predictive Analytics** - Future disruption probability modeling
 
-### 📊 **Interactive Risk Dashboard**
+### **Interactive Risk Dashboard**
 - **Global Risk Heatmap** - Visual route risk assessment
 - **Dynamic Risk Timeline** - Historical and predictive trend analysis
 - **Smart Notifications** - Instant alerts for critical route changes
 - **Executive Reports** - PDF/CSV export for stakeholder communication
 
-### 🛡️ **Enterprise-Grade Backend**
+###  **Enterprise-Grade Backend**
 - **Production-Ready FastAPI** - Async processing, JWT authentication
 - **SmythOS Integration** - Direct agent communication with retry logic
 - **Scalable Architecture** - Docker containerization, database optimization
@@ -42,7 +42,7 @@ Our **SmythOS-powered multi-agent system** continuously monitors global news, we
 
 ---
 
-## 🏗️ **System Architecture**
+## **System Architecture**
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
@@ -90,26 +90,26 @@ Our **SmythOS-powered multi-agent system** continuously monitors global news, we
 
 ---
 
-## 📈 **Business Impact & Use Cases**
+##  **Business Impact & Use Cases**
 
-### 🚢 **Shipping & Logistics**
+###  **Shipping & Logistics**
 - **Route Optimization**: Avoid high-risk shipping lanes
 - **Port Monitoring**: Real-time congestion and operational status
 - **Weather Intelligence**: Typhoon, storm, and seasonal risk alerts
 
-### 🏭 **Manufacturing**
+### **Manufacturing**
 - **Supplier Risk Assessment**: Geopolitical and operational monitoring
 - **Just-in-Time Planning**: Proactive inventory management
 - **Alternative Sourcing**: Backup supplier recommendations
 
-### 📦 **E-Commerce & Retail**
+### **E-Commerce & Retail**
 - **Delivery Prediction**: Customer notification accuracy
 - **Seasonal Planning**: Holiday and peak season preparation
 - **Cost Optimization**: Dynamic pricing based on route risks
 
 ---
 
-## 🚀 **Quick Start Demo**
+##  **Quick Start Demo**
 
 ### **Option 1: Docker (Recommended)**
 ```bash
@@ -126,13 +126,13 @@ docker-compose up --build
 cd backend/
 ./start.sh
 
-# 🚀 Server auto-starts with virtual environment
+#  Server auto-starts with virtual environment
 ```
 
 ### **Option 3: API Testing**
 ```bash
 python3 backend/test_api.py
-# ✅ Complete workflow validation
+# Complete workflow validation
 ```
 
 ---
