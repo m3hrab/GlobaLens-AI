@@ -286,4 +286,4 @@ GlobaLens AI isn't just a hackathon project—it's a **production-ready solution
 
 ---
 
-*Built for HackTheAI 2025 • Powered by SmythOS • Engineered for Impact*
+*Built for HackTheAI 2025 • Powered by SmythOS *
