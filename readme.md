@@ -285,11 +285,11 @@ GlobaLens-AI/
 └── README.md
 ```
 
-> A few things in the current tree are left over from the hackathon build (a duplicate `readme.md`, a judging-criteria doc, ad-hoc `test_*.py` scripts at the backend root, a couple of one-off `check_*.py` scripts). See [`MVP_PLAN.md`](MVP_PLAN.md) for the cleanup and re-architecture plan.
+> A few things in the current tree are left over from the hackathon build (a duplicate `readme.md`, a judging-criteria doc, ad-hoc `test_*.py` scripts at the backend root, a couple of one-off `check_*.py` scripts). See [`ROADMAP.md`](ROADMAP.md) for the cleanup and re-architecture plan.
 
 ## Status / roadmap
 
-This is a working prototype, not a finished product. Open issues are tracked on GitHub; the full plan for turning this into something closer to a real deployable product is in [`MVP_PLAN.md`](MVP_PLAN.md). Short version of what's left:
+This is a working prototype, not a finished product. Open issues are tracked on GitHub; the full plan for turning this into something closer to a real deployable product is in [`ROADMAP.md`](ROADMAP.md). Short version of what's left:
 
 - [ ] Clean up leftover hackathon artifacts (duplicate readme, judging doc, ad-hoc test scripts)
 - [ ] Finish migrating the agent layer to LangGraph
