@@ -1,289 +1,300 @@
 # GlobaLens AI
 
-**Real-time, multi-agent AI platform for global supply chain risk monitoring and predictive insights.**
+Multi-agent AI system for monitoring global supply chain risk in real time.
 
-[![HackTheAI 2025](https://img.shields.io/badge/HackTheAI-2025-blue.svg)](https://hacktheai.com)
-[![FastAPI](https://img.shields.io/badge/FastAPI-0.104.1-green.svg)](https://fastapi.tiangolo.com)
-[![SmythOS](https://img.shields.io/badge/SmythOS-Agents-orange.svg)](https://smythos.com)
+[![Python](https://img.shields.io/badge/Python-3.11+-blue.svg)](https://www.python.org)
+[![FastAPI](https://img.shields.io/badge/FastAPI-0.104.1-009688.svg)](https://fastapi.tiangolo.com)
+[![LangGraph](https://img.shields.io/badge/Agents-LangGraph-1C3C3C.svg)](https://github.com/langchain-ai/langgraph)
 [![Docker](https://img.shields.io/badge/Docker-Ready-2496ED.svg)](https://docker.com)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-> Transforming global supply chain management through intelligent risk monitoring and predictive analytics.
+## What it is
 
----
+GlobaLens AI watches global news, weather, port activity, and geopolitical events, and turns that into a risk score and a suggested action plan for a given shipping route or supplier.
 
-## **Elevator Pitch**
+It started as a submission for HackTheAI 2025 and has kept evolving since — the biggest change being a move off the original no-code agent builder (SmythOS) and onto a self-hosted agent graph built with LangGraph, which gives full control over how agents share state and call tools instead of depending on someone else's platform.
 
-**GlobaLens AI** revolutionizes supply chain risk management by providing **instant, actionable intelligence** to logistics professionals worldwide. 
+The core idea stays the same: instead of a logistics team manually scanning news and weather reports for disruptions, a set of AI agents does the scanning and hands back a structured risk assessment plus concrete mitigation steps.
 
-Our **SmythOS-powered multi-agent system** continuously monitors global news, weather patterns, port operations, and geopolitical events in real-time, automatically generating **risk assessments** and **mitigation strategies** that help decision-makers prevent disruptions before they impact business operations.
+## Features
 
-**Impact**: Reduce supply chain losses by 40%, improve route planning efficiency by 60%, and enable proactive risk mitigation across global shipping networks.
+- **Automated risk monitoring** — a Web Risk Monitor agent pulls from news, weather, and port-status sources and summarizes what's relevant to a given route
+- **Action plan generation** — an Action Plan agent turns that risk assessment into a ranked list of mitigation steps
+- **Risk dashboard** — route heatmap, a timeline of how risk has changed, and alerts when something crosses a threshold
+- **History and analytics views** — look back at past queries and reports, not just the latest one
+- **Exportable reports** — PDF/CSV output for sharing with stakeholders who don't want to open the dashboard
+- **JWT-based auth** and an async FastAPI backend so requests don't block while agents are working
 
----
+## Architecture
 
-##  **Key Features**
+At a glance, it's a fairly standard setup — a Next.js frontend, a FastAPI backend, and an agent layer that the backend calls into for the actual intelligence work:
 
-###  **SmythOS Multi-Agent Intelligence**
-- **Web Risk Monitor Agent** - Real-time data aggregation from 50+ sources
-- **Action Plan Generator** - AI-powered mitigation strategy recommendations
-- **Predictive Analytics** - Future disruption probability modeling
+```mermaid
+flowchart LR
+  client(["Next.js frontend"])
+  api["FastAPI backend"]
+  agents{{"LangGraph agents"}}
+  db[("Database")]
 
-### **Interactive Risk Dashboard**
-- **Global Risk Heatmap** - Visual route risk assessment
-- **Dynamic Risk Timeline** - Historical and predictive trend analysis
-- **Smart Notifications** - Instant alerts for critical route changes
-- **Executive Reports** - PDF/CSV export for stakeholder communication
+  client -->|"REST + JWT"| api
+  api -->|"background job"| agents
+  agents -->|"risk data + LLM calls"| api
+  api <--> db
+  agents -.->|"news, weather, port APIs"| ext(["External sources"])
 
-###  **Enterprise-Grade Backend**
-- **Production-Ready FastAPI** - Async processing, JWT authentication
-- **SmythOS Integration** - Direct agent communication with retry logic
-- **Scalable Architecture** - Docker containerization, database optimization
-- **Comprehensive API** - RESTful endpoints with OpenAPI documentation
-
----
-
-## **System Architecture**
-
-```
-┌─────────────────────────────────────────────────────────────────┐
-│                        GlobaLens AI                            │
-├─────────────────────────────────────────────────────────────────┤
-│                                                                 │
-│  📱 Frontend (Next.js)     🔄 Backend (FastAPI)    🤖 SmythOS   │
-│  ┌─────────────────┐      ┌─────────────────┐      ┌──────────┐ │
-│  │ • Risk Dashboard│◄────►│ • Authentication│◄────►│ Web Risk │ │
-│  │ • Heatmap       │      │ • Query Mgmt    │      │ Monitor  │ │
-│  │ • Timeline      │      │ • Agent Integ   │      │ Agent    │ │
-│  │ • Reports       │      │ • Report Service│      │          │ │
-│  │ • Alerts        │      │ • Database      │      │ Action   │ │
-│  └─────────────────┘      └─────────────────┘      │ Plan     │ │
-│                                   │                │ Agent    │ │
-│                           ┌───────▼────────┐       └──────────┘ │
-│                           │ SQLite Database│                    │
-│                           │ • Users        │                    │
-│                           │ • Queries      │                    │
-│                           │ • Reports      │                    │
-│                           └────────────────┘                    │
-└─────────────────────────────────────────────────────────────────┘
+  style client fill:#dbeafe,stroke:#2563eb,color:#172554
+  style api fill:#fef3c7,stroke:#d97706,color:#78350f
+  style agents fill:#e0e7ff,stroke:#4f46e5,color:#312e81
+  style db fill:#ffe4e6,stroke:#e11d48,color:#881337
+  style ext fill:#f1f5f9,stroke:#64748b,color:#334155
 ```
 
----
+The part worth calling out: the API layer never talks to news/weather/port sources directly — it hands the question to the agent layer and gets back structured results. That's what makes it possible to swap the agent framework (SmythOS → LangGraph) without touching the rest of the backend.
 
-## 🛠️ **Technology Stack**
+**Request flow** — what actually happens when someone runs a query:
 
-### **Backend (Production-Ready)**
-- **FastAPI** - High-performance async web framework
-- **SQLAlchemy** - Enterprise ORM with relationship management
-- **JWT Authentication** - Secure token-based user management
-- **Pydantic** - Comprehensive data validation and serialization
-- **Docker** - Containerized deployment with health checks
+```mermaid
+sequenceDiagram
+  actor U as User
+  participant D as Dashboard
+  participant Q as Query API
+  participant J as Background Job
+  participant A as Agent Service
+  participant R as Report Service
+  participant DB as Database
 
-### **AI/ML Integration**
-- **SmythOS Agents** - Multi-source data aggregation and analysis
-- **Real-time Processing** - Background task management
-- **Risk Modeling** - Confidence scoring and prediction algorithms
+  U->>D: Submit route/question
+  D->>Q: POST /api/v1/query
+  Q->>DB: Save query (status: pending)
+  Q-->>D: 202 Accepted (query id)
+  Q->>J: Schedule risk job
+  J->>A: Request analysis
+  A->>A: Web Risk Monitor agent
+  A->>A: Action Plan agent
+  A-->>J: Risk assessment + action plan
+  J->>R: Create report
+  R->>DB: Save report
+  J->>DB: Update query (status: done)
+  D->>Q: Poll for status
+  Q-->>D: Report ready
+```
 
-### **Data Management**
-- **SQLite** - Optimized for rapid development and demonstration
-- **Normalized Schema** - Users → Queries → Reports relationship
-- **JSON Storage** - Flexible agent response management
+<details>
+<summary><strong>Full component diagram</strong> (click to expand — maps directly to the file structure below)</summary>
 
----
+```mermaid
+flowchart TD
 
-##  **Business Impact & Use Cases**
+subgraph group_client["Client Experience"]
+  node_login["Login Signup<br/>[page.tsx]"]
+  node_dashboard["Risk Dashboard<br/>[page.tsx]"]
+  node_analytics["Analytics View<br/>[page.tsx]"]
+  node_history["History View<br/>[page.tsx]"]
+end
 
-###  **Shipping & Logistics**
-- **Route Optimization**: Avoid high-risk shipping lanes
-- **Port Monitoring**: Real-time congestion and operational status
-- **Weather Intelligence**: Typhoon, storm, and seasonal risk alerts
+subgraph group_api["FastAPI Backend"]
+  node_fastapi["FastAPI Application<br/>[main.py]"]
+  node_auth_routes["Auth Routes<br/>[auth.py]"]
+  node_query_routes["Query Routes<br/>[query.py]"]
+  node_report_routes["Report Routes<br/>[report.py]"]
+  node_auth_core["JWT Authentication<br/>[auth.py]"]
+  node_query_service["Query Service<br/>[query_service.py]"]
+  node_error_handler["Error Handling<br/>[error_handler.py]"]
+end
 
-### **Manufacturing**
-- **Supplier Risk Assessment**: Geopolitical and operational monitoring
-- **Just-in-Time Planning**: Proactive inventory management
-- **Alternative Sourcing**: Backup supplier recommendations
+subgraph group_intelligence["Risk Intelligence"]
+  node_risk_job["Background Risk Job<br/>[query.py]"]
+  node_agent_service["Agent Service<br/>[agent_service.py]"]
+  node_report_service["Report Service<br/>[report_service.py]"]
+end
 
-### **E-Commerce & Retail**
-- **Delivery Prediction**: Customer notification accuracy
-- **Seasonal Planning**: Holiday and peak season preparation
-- **Cost Optimization**: Dynamic pricing based on route risks
+subgraph group_persistence["Data Persistence"]
+  node_user_store[("User Store<br/>[user.py]")]
+  node_query_store[("Query Store<br/>[query.py]")]
+  node_report_store[("Report Store<br/>[report.py]")]
+  node_database[("SQL Database<br/>[database.py]")]
+end
 
----
+node_user(("Logistics User"))
+node_risk_agent["Web Risk Monitor"]
+node_action_agent["Action Plan Agent"]
 
-##  **Quick Start Demo**
+node_user -->|"opens client"| node_login
+node_login -->|"authenticates"| node_auth_routes
+node_auth_routes -->|"validates tokens"| node_auth_core
+node_auth_routes -->|"reads users"| node_user_store
+node_fastapi -->|"dispatches auth"| node_auth_routes
+node_fastapi -->|"dispatches queries"| node_query_routes
+node_fastapi -->|"dispatches reports"| node_report_routes
+node_fastapi -->|"registers handlers"| node_error_handler
+node_user -->|"submits question"| node_dashboard
+node_dashboard -->|"creates queries"| node_query_routes
+node_query_routes -->|"creates query"| node_query_service
+node_query_service -->|"writes query"| node_query_store
+node_query_routes -->|"schedules processing"| node_risk_job
+node_risk_job -->|"updates status"| node_query_service
+node_risk_job -->|"requests analysis"| node_agent_service
+node_agent_service -.->|"monitors risks"| node_risk_agent
+node_agent_service -.->|"generates actions"| node_action_agent
+node_risk_job -->|"creates reports"| node_report_service
+node_report_service -->|"writes reports"| node_report_store
+node_report_routes -->|"retrieves reports"| node_report_service
+node_history -->|"loads history"| node_query_routes
+node_analytics -->|"loads insights"| node_report_routes
+node_dashboard -->|"polls status"| node_query_routes
+node_database -->|"stores records"| node_user_store
+node_database -->|"stores records"| node_query_store
+node_database -->|"stores records"| node_report_store
 
-### **Option 1: Docker (Recommended)**
+classDef toneBlue fill:#dbeafe,stroke:#2563eb,stroke-width:1.5px,color:#172554
+classDef toneAmber fill:#fef3c7,stroke:#d97706,stroke-width:1.5px,color:#78350f
+classDef toneMint fill:#dcfce7,stroke:#16a34a,stroke-width:1.5px,color:#14532d
+classDef toneRose fill:#ffe4e6,stroke:#e11d48,stroke-width:1.5px,color:#881337
+classDef toneIndigo fill:#e0e7ff,stroke:#4f46e5,stroke-width:1.5px,color:#312e81
+class node_login,node_dashboard,node_analytics,node_history,node_user toneBlue
+class node_fastapi,node_auth_routes,node_query_routes,node_report_routes,node_auth_core,node_query_service,node_error_handler toneAmber
+class node_risk_job,node_agent_service,node_report_service toneMint
+class node_user_store,node_query_store,node_report_store,node_database toneRose
+class node_risk_agent,node_action_agent toneIndigo
+```
+
+**Legend:** 🔵 client/UI · 🟡 API layer (routes, auth, error handling) · 🟢 background processing (jobs, agent service, reports) · 🔴 persistence · 🟣 agents
+
+</details>
+
+## Tech stack
+
+**Backend**
+- FastAPI, SQLAlchemy, Pydantic
+- JWT auth (`core/auth.py`)
+- SQLite for development (Postgres-ready)
+
+**Frontend**
+- Next.js — login/signup, risk dashboard, analytics, and history views
+
+**Agents / AI**
+- [LangGraph](https://github.com/langchain-ai/langgraph) orchestrates the Web Risk Monitor and Action Plan agents as a stateful graph, with checkpointing so a long-running query can resume instead of restarting
+- An LLM provider of your choice for the underlying reasoning (OpenAI, Anthropic, or a local model via Ollama — configure via `.env`)
+
+**Infra**
+- Docker + docker-compose for local dev and deploy
+
+## Getting started
+
+### Docker (recommended)
+
 ```bash
 git clone https://github.com/m3hrab/GlobaLens-AI.git
 cd GlobaLens-AI/backend
 docker-compose up --build
-
-# 🌐 API: http://localhost:8000
-# 📚 Docs: http://localhost:8000/docs
 ```
 
-### **Option 2: Local Development**
+API will be at `http://localhost:8000`, docs at `http://localhost:8000/docs`.
+
+### Local dev
+
 ```bash
-cd backend/
-./start.sh
-
-#  Server auto-starts with virtual environment
-```
-
-### **Option 3: API Testing**
-```bash
-python3 backend/test_api.py
-# Complete workflow validation
-```
-
----
-
-## 📊 **API Endpoints**
-
-### **Authentication**
-- `POST /api/v1/auth/signup` - User registration
-- `POST /api/v1/auth/login` - JWT authentication
-
-### **Risk Analysis**
-- `POST /api/v1/query/` - Create risk analysis (async)
-- `GET /api/v1/query/{id}` - Query status and results
-
-### **Reports & Actions**
-- `GET /api/v1/report/{id}/risk-analysis` - Detailed risk assessment
-- `POST /api/v1/report/{id}/action-plan` - Generate mitigation strategies
-
-**📖 Complete API Documentation**: [http://localhost:8000/docs](http://localhost:8000/docs)
-
----
-
-## 🎯 **Hackathon Excellence**
-
-### **🏆 Technical Innovation**
-- **SmythOS Integration**: Cutting-edge multi-agent AI system
-- **Real-time Processing**: Background task architecture
-- **Production Quality**: Enterprise-grade security and scalability
-- **API-First Design**: Frontend-optimized JSON responses
-
-### **📋 Documentation & Quality**
-- **Complete ER Diagram**: Normalized database design
-- **Architecture Diagrams**: Visual system overview
-- **Comprehensive Testing**: API workflow validation
-- **Docker Deployment**: One-command production setup
-
-### **🌟 User Experience**
-- **Intuitive Workflow**: Question → Analysis → Actions
-- **Visual Intelligence**: Risk heatmaps and trend analysis
-- **Executive Reporting**: PDF/CSV export capabilities
-- **Mobile-Ready**: Responsive design for field operations
-
-### **💼 Real-World Applicability**
-- **Scalable Solution**: Handles enterprise-level queries
-- **Industry Standards**: RESTful API, JWT security
-- **Cost-Effective**: Reduces manual risk assessment by 80%
-- **Actionable Insights**: Direct impact on business decisions
-
----
-
-## 🔧 **Development & Deployment**
-
-### **Local Development**
-```bash
-# Backend setup
-cd backend/
+cd backend
 python3 -m venv venv
 source venv/bin/activate
 pip install -r requirements.txt
 uvicorn app.main:app --reload
+```
 
-# Frontend setup (coming soon)
-cd frontend/
+### Frontend
+
+```bash
+cd frontend
 npm install
 npm run dev
 ```
 
-### **Production Deployment**
-```bash
-# Docker deployment
-docker-compose up -d
+### Environment variables
 
-# Cloud deployment ready for:
-# • AWS ECS/Fargate
-# • Google Cloud Run
-# • Azure Container Instances
-# • Kubernetes clusters
+```bash
+cp .env.example .env
+# then set your LLM provider key (OPENAI_API_KEY, ANTHROPIC_API_KEY, etc.)
+# and DATABASE_URL if you're not using the SQLite default
 ```
 
----
+## API overview
 
-## 📁 **Project Structure**
+| Endpoint | Description |
+|---|---|
+| `POST /api/v1/auth/signup` | Register a user |
+| `POST /api/v1/auth/login` | Log in, get a JWT |
+| `POST /api/v1/query/` | Kick off a risk analysis (async) |
+| `GET /api/v1/query/{id}` | Check status / get results |
+| `GET /api/v1/report/{id}/risk-analysis` | Full risk breakdown |
+| `POST /api/v1/report/{id}/action-plan` | Generate mitigation steps |
+
+Full OpenAPI docs are served at `/docs` once the server is running.
+
+## Project structure
 
 ```
 GlobaLens-AI/
-├── backend/                 # FastAPI production backend
+├── backend/
 │   ├── app/
-│   │   ├── core/           # Configuration, auth, database
-│   │   ├── models/         # SQLAlchemy database models
-│   │   ├── schemas/        # Pydantic validation schemas
-│   │   ├── services/       # Business logic and SmythOS integration
-│   │   ├── routes/         # API endpoint definitions
-│   │   └── middleware/     # Error handling and security
-│   ├── Dockerfile          # Container configuration
-│   ├── docker-compose.yml  # Multi-service orchestration
-│   └── README.md           # Complete backend documentation
-├── frontend/               # Next.js dashboard (in development)
-├── docs/                   # Architecture and API documentation
-│   ├── backend_architecture.md
-│   ├── api_examples.md
-│   └── agents_details.md
-└── README.md               # This file
+│   │   ├── main.py                     # FastAPI app, route registration
+│   │   ├── core/
+│   │   │   ├── auth.py                 # JWT auth
+│   │   │   └── database.py             # DB session/engine
+│   │   ├── models/
+│   │   │   ├── user.py
+│   │   │   ├── query.py
+│   │   │   └── report.py
+│   │   ├── services/
+│   │   │   ├── query_service.py        # query lifecycle
+│   │   │   ├── agent_service.py        # calls into the LangGraph agents
+│   │   │   └── report_service.py       # report generation/storage
+│   │   ├── routes/
+│   │   │   ├── auth.py
+│   │   │   ├── query.py                # includes the background risk job
+│   │   │   └── report.py
+│   │   └── middleware/
+│   │       └── error_handler.py
+│   ├── Dockerfile
+│   └── docker-compose.yml
+├── frontend/
+│   └── src/app/
+│       ├── login/page.tsx
+│       ├── dashboard/page.tsx
+│       ├── analytics/page.tsx
+│       └── history/page.tsx
+├── docs/                                # architecture notes, API examples
+├── LICENSE
+└── README.md
 ```
 
----
+## Status / roadmap
 
-## 🌟 **What Makes Us Different**
+This is a working prototype, not a finished product. Some things on the list:
 
-### **🚀 Innovation**
-- **First** supply chain platform with real-time SmythOS agent integration
-- **Predictive** risk modeling with confidence scoring
-- **Automated** action plan generation with priority ranking
+- [ ] Finish out the analytics view (currently basic)
+- [ ] Swap SQLite for Postgres by default
+- [ ] Add more data sources beyond news/weather (customs data, carrier APIs)
+- [ ] Write proper test coverage for the agent graph
+- [ ] Stream partial agent output to the frontend instead of polling
 
-### **💎 Quality**
-- **Production-ready** architecture from day one
-- **Enterprise security** with JWT authentication and input validation
-- **Scalable design** supporting thousands of concurrent users
+## Contributing
 
-### **🎯 Impact**
-- **Measurable ROI** through disruption prevention and cost optimization
-- **Global applicability** across industries and shipping routes
-- **Decision support** for C-level executives and operational teams
+This project is open source and contributions are welcome — bug fixes, new data sources, a better frontend, or improvements to the agent graph. Open an issue first for anything non-trivial so we can talk through the approach before you sink time into it.
 
----
+1. Fork the repo
+2. Create a branch (`git checkout -b feature/thing`)
+3. Commit your changes
+4. Open a PR
 
-## 👥 **Team & Contact**
+## License
 
-### **Team BUBT_Droptouts**
-**Built with ❤️ for HackTheAI 2025**
+MIT — see [LICENSE](LICENSE).
 
-#### **Team Members**
-- **Mehrab Hossain**  
-  📧 GitHub: [@m3hrab](https://github.com/m3hrab)
-  
-- **Zehad Khan**  
-  📧 GitHub: [@zehadkhan](https://github.com/zehadkhan)
+## Team
 
-#### **Project Links**
-- **📂 Repository**: [github.com/m3hrab/GlobaLens-AI](https://github.com/m3hrab/GlobaLens-AI)
-- **🚀 Live Demo**: [Coming soon - Backend ready at localhost:8000]
-- **📚 Documentation**: [Complete API docs included]
-- **🏆 Team**: BUBT_Droptouts - HackTheAI 2025
+Built for HackTheAI 2025 by Team BUBT_Droptouts.
 
----
+- **Mehrab Hossain** — [@m3hrab](https://github.com/m3hrab)
+- **Zehad Khan** — [@zehadkhan](https://github.com/zehadkhan)
 
-## 🏆 **Ready for Production**
-
-GlobaLens AI isn't just a hackathon project—it's a **production-ready solution** that can be deployed immediately to solve real-world supply chain challenges.
-
-**Try it now**: `git clone` → `docker-compose up` → **Transform your supply chain intelligence**
-
----
-
-*Built for HackTheAI 2025 • Powered by SmythOS *
+Repo: [github.com/m3hrab/GlobaLens-AI](https://github.com/m3hrab/GlobaLens-AI)
