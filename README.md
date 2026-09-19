@@ -321,3 +321,4 @@ Built for HackTheAI 2025 by Team BUBT_Droptouts.
 - **Zehad Khan** — [@zehadkhan](https://github.com/zehadkhan)
 
 Repo: [github.com/m3hrab/GlobaLens-AI](https://github.com/m3hrab/GlobaLens-AI)
+
