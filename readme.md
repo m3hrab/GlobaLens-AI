@@ -239,11 +239,17 @@ GlobaLens-AI/
 │   │   ├── main.py                     # FastAPI app, route registration
 │   │   ├── core/
 │   │   │   ├── auth.py                 # JWT auth
+│   │   │   ├── config.py               # settings (env-driven)
 │   │   │   └── database.py             # DB session/engine
 │   │   ├── models/
 │   │   │   ├── user.py
 │   │   │   ├── query.py
 │   │   │   └── report.py
+│   │   ├── schemas/                    # Pydantic request/response models
+│   │   │   ├── user.py
+│   │   │   ├── query.py
+│   │   │   ├── report.py
+│   │   │   └── agent.py
 │   │   ├── services/
 │   │   │   ├── query_service.py        # query lifecycle
 │   │   │   ├── agent_service.py        # calls into the LangGraph agents
@@ -255,27 +261,44 @@ GlobaLens-AI/
 │   │   └── middleware/
 │   │       └── error_handler.py
 │   ├── Dockerfile
-│   └── docker-compose.yml
+│   ├── docker-compose.yml
+│   └── requirements.txt
 ├── frontend/
-│   └── src/app/
-│       ├── login/page.tsx
-│       ├── dashboard/page.tsx
-│       ├── analytics/page.tsx
-│       └── history/page.tsx
-├── docs/                                # architecture notes, API examples
+│   ├── src/
+│   │   ├── app/
+│   │   │   ├── page.tsx
+│   │   │   ├── layout.tsx
+│   │   │   ├── login/page.tsx
+│   │   │   ├── signup/page.tsx
+│   │   │   ├── dashboard/page.tsx
+│   │   │   ├── analytics/page.tsx
+│   │   │   ├── history/page.tsx
+│   │   │   └── settings/page.tsx
+│   │   ├── components/                 # Navbar, DashboardLayout, forms, theming
+│   │   ├── contexts/                   # AuthContext, NotificationContext
+│   │   ├── hooks/                      # useAuth, useQueries
+│   │   └── types/                      # shared API/auth types
+│   └── Dockerfile
+├── docs/                                # architecture notes, API examples, Postman collection
+├── docker-compose.yml                   # full-stack (frontend + backend)
 ├── LICENSE
 └── README.md
 ```
 
+> A few things in the current tree are left over from the hackathon build (a duplicate `readme.md`, a judging-criteria doc, ad-hoc `test_*.py` scripts at the backend root, a couple of one-off `check_*.py` scripts). See [`MVP_PLAN.md`](MVP_PLAN.md) for the cleanup and re-architecture plan.
+
 ## Status / roadmap
 
-This is a working prototype, not a finished product. Some things on the list:
+This is a working prototype, not a finished product. Open issues are tracked on GitHub; the full plan for turning this into something closer to a real deployable product is in [`MVP_PLAN.md`](MVP_PLAN.md). Short version of what's left:
 
+- [ ] Clean up leftover hackathon artifacts (duplicate readme, judging doc, ad-hoc test scripts)
+- [ ] Finish migrating the agent layer to LangGraph
 - [ ] Finish out the analytics view (currently basic)
 - [ ] Swap SQLite for Postgres by default
 - [ ] Add more data sources beyond news/weather (customs data, carrier APIs)
 - [ ] Write proper test coverage for the agent graph
 - [ ] Stream partial agent output to the frontend instead of polling
+- [ ] Add CI (lint + tests on every PR)
 
 ## Contributing
 
