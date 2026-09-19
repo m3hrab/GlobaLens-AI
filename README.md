@@ -322,7 +322,3 @@ Built for HackTheAI 2025 by Team BUBT_Droptouts.
 
 Repo: [github.com/m3hrab/GlobaLens-AI](https://github.com/m3hrab/GlobaLens-AI)
 
-## Docker Compose decision
-
-This repository uses the top-level `docker-compose.yml` as the canonical compose file for orchestrating services in development. The `backend/docker-compose.yml` was part of the original HackTheAI submission and has been archived at `archive/hackathon_artifacts/backend-docker-compose.yml` to avoid duplication and confusion. If you need a service-specific compose in future, document the reason and keep only one canonical compose file at the repo root.
-
